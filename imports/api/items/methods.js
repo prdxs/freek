@@ -6,10 +6,6 @@ import { _ } from 'meteor/underscore';
 
 import { Items } from './items.js';
 
-const LIST_ID_ONLY = new SimpleSchema({
-    listId: { type: String },
-}).validator();
-
 export const insertItem = new ValidatedMethod({
     name: 'items.insert',
     validate: new SimpleSchema({
@@ -25,7 +21,7 @@ export const insertItem = new ValidatedMethod({
             title: title,
             description: description,
             createdAt: new Date(),
-            owner: this.userId(),
+            owner: this.userId,
             username: this.user().username
         });
     }
@@ -41,7 +37,7 @@ export const updateItem = new ValidatedMethod({
     run({ id, title, description }) {
         const item = Items.findOne(id);
 
-        if (!this.userId() || this.userId() != item.owner) {
+        if (!this.userId || this.userId != item.owner) {
             throw new Meteor.Error('items.update.accessDenied',
             'You don\'t have permission to edit this item.');
         }
@@ -66,9 +62,9 @@ export const removeItem = new ValidatedMethod({
     run({ id }) {
         const item = Items.findOne(id);
 
-        if (!this.userId || this.userId() != item.owner) {
+        if (!this.userId || this.userId != item.owner) {
             throw new Meteor.Error('items.remove.accessDenied',
-            'You don\'t have permission to remove this list.');
+            'You don\'t have permission to remove this item.');
         }
 
         // XXX the security check above is not atomic, so in theory a race condition could
@@ -78,18 +74,18 @@ export const removeItem = new ValidatedMethod({
     },
 });
 
-// Get list of all method names on Lists
-const LISTS_METHODS = _.pluck([
+// Get list of all method names on Items
+const ITEMS_METHODS = _.pluck([
     insertItem,
     updateItem,
     removeItem,
 ], 'name');
 
 if (Meteor.isServer) {
-    // Only allow 5 list operations per connection per second
+    // Only allow 5 item operations per connection per second
     DDPRateLimiter.addRule({
         name(name) {
-            return _.contains(LISTS_METHODS, name);
+            return _.contains(ITEMS_METHODS, name);
         },
 
         // Rate limit per connection ID

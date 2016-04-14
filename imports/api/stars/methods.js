@@ -4,126 +4,56 @@ import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { DDPRateLimiter } from 'meteor/ddp-rate-limiter';
 import { _ } from 'meteor/underscore';
 
-import { Items } from './items.js';
+import { Stars } from './stars.js';
 
-const LIST_ID_ONLY = new SimpleSchema({
-    listId: { type: String },
-}).validator();
-
-export const insert = new ValidatedMethod({
-    name: 'lists.insert',
-    validate: new SimpleSchema({}).validator(),
-    run() {
-        return Lists.insert({});
-    },
-});
-
-export const makePrivate = new ValidatedMethod({
-    name: 'lists.makePrivate',
-    validate: LIST_ID_ONLY,
-    run({ listId }) {
-        if (!this.userId) {
-            throw new Meteor.Error('lists.makePrivate.notLoggedIn',
-            'Must be logged in to make private lists.');
-        }
-
-        const list = Lists.findOne(listId);
-
-        if (list.isLastPublicList()) {
-            throw new Meteor.Error('lists.makePrivate.lastPublicList',
-            'Cannot make the last public list private.');
-        }
-
-        Lists.update(listId, {
-            $set: { userId: this.userId },
-        });
-    },
-});
-
-export const makePublic = new ValidatedMethod({
-    name: 'lists.makePublic',
-    validate: LIST_ID_ONLY,
-    run({ listId }) {
-        if (!this.userId) {
-            throw new Meteor.Error('lists.makePublic.notLoggedIn',
-            'Must be logged in.');
-        }
-
-        const list = Lists.findOne(listId);
-
-        if (!list.editableBy(this.userId)) {
-            throw new Meteor.Error('lists.makePublic.accessDenied',
-            'You don\'t have permission to edit this list.');
-        }
-
-        // XXX the security check above is not atomic, so in theory a race condition could
-        // result in exposing private data
-        Lists.update(listId, {
-            $unset: { userId: true },
-        });
-    },
-});
-
-export const updateName = new ValidatedMethod({
-    name: 'lists.updateName',
+export const insertStar = new ValidatedMethod({
+    name: 'stars.insert',
     validate: new SimpleSchema({
-        listId: { type: String },
-        newName: { type: String },
+        itemID: { type: String }
     }).validator(),
-    run({ listId, newName }) {
-        const list = Lists.findOne(listId);
-
-        if (!list.editableBy(this.userId)) {
-            throw new Meteor.Error('lists.updateName.accessDenied',
-            'You don\'t have permission to edit this list.');
+    run({ itemID }) {
+        if (!this.userId) {
+            throw new Meteor.Error('stars.insert.notLoggedIn',
+                'Must be logged in to star an item.');
         }
-
-        // XXX the security check above is not atomic, so in theory a race condition could
-        // result in exposing private data
-
-        Lists.update(listId, {
-            $set: { name: newName },
+        return Stars.insert({
+            userID: this.userId,
+            itemID: itemID
         });
-    },
+    }
 });
 
-export const remove = new ValidatedMethod({
-    name: 'lists.remove',
-    validate: LIST_ID_ONLY,
-    run({ listId }) {
-        const list = Lists.findOne(listId);
+export const removeStar = new ValidatedMethod({
+    name: 'stars.remove',
+    validate: new SimpleSchema({
+        id: { type: String }
+    }).validator(),
+    run({ id }) {
+        const star = Stars.findOne(id);
 
-        if (!list.editableBy(this.userId)) {
-            throw new Meteor.Error('lists.remove.accessDenied',
-            'You don\'t have permission to remove this list.');
+        if (!this.userId || this.userId != star.userID) {
+            throw new Meteor.Error('items.remove.accessDenied',
+            'You don\'t have permission to remove this star.');
         }
 
         // XXX the security check above is not atomic, so in theory a race condition could
         // result in exposing private data
 
-        if (list.isLastPublicList()) {
-            throw new Meteor.Error('lists.remove.lastPublicList',
-            'Cannot delete the last public list.');
-        }
-
-        Lists.remove(listId);
+        Stars.remove(id);
     },
 });
 
-// Get list of all method names on Lists
-const LISTS_METHODS = _.pluck([
-    insert,
-    makePublic,
-    makePrivate,
-    updateName,
-    remove,
+// Get list of all method names on Items
+const STARS_METHODS = _.pluck([
+    insertStar,
+    removeStar,
 ], 'name');
 
 if (Meteor.isServer) {
-    // Only allow 5 list operations per connection per second
+    // Only allow 5 item operations per connection per second
     DDPRateLimiter.addRule({
         name(name) {
-            return _.contains(LISTS_METHODS, name);
+            return _.contains(STARS_METHODS, name);
         },
 
         // Rate limit per connection ID
