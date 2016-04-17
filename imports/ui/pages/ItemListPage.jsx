@@ -6,21 +6,10 @@ import Message from '../components/Message.jsx';
 export default class ItemListPage extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            editingTodo: null,
-        };
-        this.onEditingChange = this.onEditingChange.bind(this);
-    }
-
-    onEditingChange(id, editing) {
-        this.setState({
-            editingTodo: editing ? id : null,
-        });
     }
 
     render() {
         const { user, items, stars } = this.props;
-        const { editingTodo } = this.state;
 
         let Items;
         if (!items || !items.length) {
@@ -35,6 +24,7 @@ export default class ItemListPage extends React.Component {
                 <Item
                     item={item}
                     editable={user._id === item.owner}
+                    star={ stars.find(s => s.userID === user._id) }
                 />
             ));
         }
