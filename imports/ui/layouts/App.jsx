@@ -11,11 +11,12 @@ import Loading from '../components/Loading.jsx';
 const CONNECTION_ISSUE_TIMEOUT = 5000;
 
 export default class App extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {
             chatOpen: false,
-            showConnectionIssue: false,
+            showConnectionIssue: false
         };
         this.toggleChat = this.toggleChat.bind(this);
         this.logout = this.logout.bind(this);
@@ -28,29 +29,12 @@ export default class App extends React.Component {
         }, CONNECTION_ISSUE_TIMEOUT);
     }
 
-    // componentWillReceiveProps({ loading, children }) {
-    //     // redirect / to a list once lists are ready
-    //     if (!loading && !children) {
-    //         const list = Lists.findOne();
-    //         this.context.router.replace(`/lists/${ list._id }`);
-    //     }
-    // }
-
     toggleChat(chatOpen = !Session.get('chatOpen')) {
         Session.set({ chatOpen });
     }
 
     logout() {
         Meteor.logout();
-
-        // if we are on a private list, we'll need to go to a public one
-        // if (this.props.params.id) {
-        //     const list = Lists.findOne(this.props.params.id);
-        //     if (list.userId) {
-        //         const publicList = Lists.findOne({ userId: { $exists: false } });
-        //         this.context.router.push(`/lists/${ publicList._id }`);
-        //     }
-        // }
 
         /* TODO quit editing buttons */
     }
@@ -61,8 +45,6 @@ export default class App extends React.Component {
             user,
             connected,
             loading,
-            items,
-            stars,
             chatOpen,
             children,
             location,

@@ -1,8 +1,6 @@
 import { Meteor } from 'meteor/meteor';
 // XXX: Session
 import { Session } from 'meteor/session';
-import { Items } from '../../api/items/items.js';
-import { Stars } from '../../api/stars/stars.js';
 import { createContainer } from 'meteor/react-meteor-data';
 import App from '../layouts/App.jsx';
 

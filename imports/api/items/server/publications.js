@@ -2,7 +2,7 @@
 
 import { Meteor } from 'meteor/meteor';
 
-import { Lists } from '../items.js';
+import { Items } from '../items.js';
 
 Meteor.publish('items', function items() {
     return Items.find();
