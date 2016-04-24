@@ -7,11 +7,13 @@ import ItemListPage from '../pages/ItemListPage.jsx';
 export default createContainer(() => {
     const itemsHandle = Meteor.subscribe('items');
     const starsHandle = Meteor.subscribe('stars');
+    const loading = !itemsHandle.ready() || !starsHandle.ready();
     const items = Lists.find().fetch();
-    const stars = Stars.find().fetch();
+    items.forEach((item) => {
+        item.starred = (!Stars.findOne({ itemId: item._id })) ? true : false;
+    });
     return {
-        user: Meteor.user(),
-        items: Lists.find().fetch(),
-        stars: Stars.find().fetch()
+        loading,
+        items: loading ? [] : items
     };
 }, ItemListPage);

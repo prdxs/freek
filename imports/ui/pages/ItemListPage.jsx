@@ -1,6 +1,7 @@
 import React from 'react';
 import Item from '../components/Item.jsx';
 import NotFoundPage from '../pages/NotFoundPage.jsx';
+import Loading from '../components/Loading.jsx';
 import Message from '../components/Message.jsx';
 
 export default class ItemListPage extends React.Component {
@@ -9,10 +10,13 @@ export default class ItemListPage extends React.Component {
     }
 
     render() {
-        const { user, items, stars } = this.props;
+        const { loading, items } = this.props;
 
         let Items;
-        if (!items || !items.length) {
+        if (loading) {
+            Items = <Loading/>;
+        }
+        else if (!items || !items.length) {
             Items = (
                 <Message
                     title="No hay items"
@@ -40,7 +44,6 @@ export default class ItemListPage extends React.Component {
 }
 
 ListPage.propTypes = {
-    user: React.PropTypes.object,
-    items: React.PropTypes.array,
-    stars: React.PropTypes.array
+    loading: React.PropTypes.bool,
+    items: React.PropTypes.array
 };

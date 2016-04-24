@@ -9,9 +9,9 @@ import { Stars } from './stars.js';
 export const insertStar = new ValidatedMethod({
     name: 'stars.insert',
     validate: new SimpleSchema({
-        itemID: { type: String }
+        itemId: { type: String }
     }).validator(),
-    run({ itemID }) {
+    run({ itemId }) {
         if (!this.userId) {
             throw new Meteor.Error('stars.insert.notLoggedIn',
                 'Must be logged in to star an item.');

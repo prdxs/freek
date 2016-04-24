@@ -38,8 +38,10 @@ export default class Item extends React.Component {
                     <h3 className="title">{item.title}</h3>
                     <p className="description">{item.description}</p>
                     { item.owner === user._id ?
-                        <button onClick={this.removeItem}>REMOVE</button>
-                        <button className="{}" onClick={this.toggleStar}>STAR</button>
+                        <div className="btns-overlay">
+                            <button onClick={this.removeItem}>REMOVE</button>
+                            <button className="" onClick={this.toggleStar}>STAR</button>
+                        </div>
                         : ""
                     }
                 </div>

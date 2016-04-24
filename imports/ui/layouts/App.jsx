@@ -15,7 +15,6 @@ export default class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            chatOpen: false,
             showConnectionIssue: false
         };
         this.toggleChat = this.toggleChat.bind(this);
@@ -23,6 +22,7 @@ export default class App extends React.Component {
     }
 
     componentDidMount() {
+        /* XXX Don't understand */
         setTimeout(() => {
             /* eslint-disable react/no-did-mount-set-state */
             this.setState({ showConnectionIssue: true });
