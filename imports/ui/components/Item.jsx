@@ -9,9 +9,9 @@ import { insertStar, removeStar  } from '../../api/stars/methods.js';
 export default class Item extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
+/*        this.state = {
             starred: this.props.starred
-        };
+        };*/
 
         this.removeItem = this.removeItem.bind(this);
         this.toggleStar = this.toggleStar.bind(this);
@@ -24,8 +24,7 @@ export default class Item extends React.Component {
     }
 
     toggleStar() {
-        insertStar.call();
-        removeStar.call();
+        item.starred ? removeStar.call() : insertStar.call();
     }
 
     render() {
@@ -37,10 +36,10 @@ export default class Item extends React.Component {
                 <div className="info">
                     <h3 className="title">{item.title}</h3>
                     <p className="description">{item.description}</p>
-                    { item.owner === user._id ?
+                    { item.editable ?
                         <div className="btns-overlay">
                             <button onClick={this.removeItem}>REMOVE</button>
-                            <button className="" onClick={this.toggleStar}>STAR</button>
+                            <button className="{item.starred ? 'starred' : ''}" onClick={this.toggleStar}>STAR</button>
                         </div>
                         : ""
                     }

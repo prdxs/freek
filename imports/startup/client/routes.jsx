@@ -3,7 +3,7 @@ import { Router, Route, browserHistory } from 'react-router';
 
 // route components
 import AppContainer from '../../ui/containers/AppContainer.jsx';
-import ListContainer from '../../ui/containers/ListContainer.jsx';
+import ItemListContainer from '../../ui/containers/ItemListContainer.jsx';
 import AuthPageSignIn from '../../ui/pages/AuthPageSignIn.jsx';
 import AuthPageJoin from '../../ui/pages/AuthPageJoin.jsx';
 import NotFoundPage from '../../ui/pages/NotFoundPage.jsx';

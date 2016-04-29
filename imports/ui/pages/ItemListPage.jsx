@@ -28,7 +28,6 @@ export default class ItemListPage extends React.Component {
                 <Item
                     item={item}
                     editable={user._id === item.owner}
-                    star={ stars.find(s => s.userID === user._id) }
                 />
             ));
         }
