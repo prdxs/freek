@@ -11,6 +11,6 @@ export default createContainer(() => {
         user: Meteor.user(),
         loading: !(itemsHandle.ready() && starsHandle.ready()),
         connected: Meteor.status().connected,
-        chatOpen: Session.get('chatOpen')
+        chatOpen: !!Session.get('chatOpen')
     };
 }, App);

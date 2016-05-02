@@ -26,28 +26,29 @@ Meteor.startup(() => {
         });
     }
     if (Items.find().count() === 0) {
+        console.log(Meteor.users.findOne({username: {$eq: 'user1'}}));
         const data = [
             {
                 title: 'Sofá rojo',
                 description: 'Sofá rojo de piel sin magulladuras.',
-                owner: Meteor.users.find({nickname: {$eq: 'user1'}})._id,
-                nickname: 'user1',
-                createdAt: new Date()
+                createdAt: new Date(),
+                owner: Meteor.users.findOne({username: {$eq: 'user1'}})._id,
+                username: 'user1'
             },
             {
                 title: 'Sillas de madera',
                 description: '4 sillas de madera clásicas en perfectas condiciones.',
-                owner: Meteor.users.find({nickname: {$eq: 'user2'}})._id,
-                nickname: 'user2',
-                createdAt: new Date()
+                createdAt: new Date(),
+                owner: Meteor.users.findOne({username: {$eq: 'user2'}})._id,
+                username: 'user2'
             },
             {
                 title: 'Mesa grande',
                 description: 'Mesa grande de plástico para terrazas o exteriores.',
-                owner: Meteor.users.find({nickname: {$eq: 'user3'}})._id,
-                nickname: 'user3',
-                createdAt: new Date()
-            },
+                createdAt: new Date(),
+                owner: Meteor.users.findOne({username: {$eq: 'user3'}})._id,
+                username: 'user3'
+            }
         ];
 
         data.forEach((item) => {

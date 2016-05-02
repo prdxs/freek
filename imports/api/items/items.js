@@ -10,13 +10,13 @@ class ItemsCollection extends Mongo.Collection {
     }
 }
 
-export const Items = new ItemsCollection('Items');
+export const Items = new ItemsCollection('items');
 
 // Deny all client-side updates since we will be using methods to manage this collection
 Items.deny({
     insert() { return true; },
     update() { return true; },
-    remove() { return true; },
+    remove() { return true; }
 });
 
 Items.schema = new SimpleSchema({
@@ -32,7 +32,7 @@ Items.attachSchema(Items.schema);
 // This represents the keys from Items objects that should be published
 // to the client. If we add secret properties to Item objects, don't list
 // them here to keep them private to the server.
-Lists.publicFields = {
+Items.publicFields = {
     title: 1,
     description: 1,
     createdAt: 1,
@@ -52,5 +52,5 @@ Items.helpers({
     },
     stars() {
         return Todos.find({ userID: this._id });
-    },
+    }
 });

@@ -22,7 +22,7 @@ export const insertItem = new ValidatedMethod({
             description: description,
             createdAt: new Date(),
             owner: this.userId,
-            username: this.user().username
+            username: Meteor.user().username
         });
     }
 });
@@ -78,7 +78,7 @@ export const removeItem = new ValidatedMethod({
 const ITEMS_METHODS = _.pluck([
     insertItem,
     updateItem,
-    removeItem,
+    removeItem
 ], 'name');
 
 if (Meteor.isServer) {

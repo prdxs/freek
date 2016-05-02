@@ -2,7 +2,7 @@ import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { Factory } from 'meteor/factory';
 
-export const Stars = new Mongo.Collection('Stars');
+export const Stars = new Mongo.Collection('stars');
 
 // Deny all client-side updates since we will be using methods to manage this collection
 Stars.deny({
@@ -13,7 +13,7 @@ Stars.deny({
 Stars.schema = new SimpleSchema({
     _id: { type: String },
     userId: { type: String },
-    itemID: { type: String }
+    itemId: { type: String }
 });
 
 Stars.attachSchema(Stars.schema);

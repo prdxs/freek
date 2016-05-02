@@ -15,6 +15,7 @@
     "react-addons-css-transition-group": "https://registry.npmjs.org/react-addons-css-transition-group/-/react-addons-css-transition-group-15.0.1.tgz",
     "react-addons-pure-render-mixin": "^15.0.0",
     "react-dom": "^15.0.0",
+    "react-dropzone": "^3.4.0",
     "react-router": "https://registry.npmjs.org/react-router/-/react-router-2.0.1.tgz"
   },
   "devDependencies": {

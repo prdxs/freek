@@ -1,6 +1,6 @@
+import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import { _ } from 'meteor/underscore';
-import classnames from 'classnames';
 import { displayError } from '../helpers/errors.js';
 
 import { removeItem } from '../../api/items/methods.js';
@@ -9,9 +9,6 @@ import { insertStar, removeStar  } from '../../api/stars/methods.js';
 export default class Item extends React.Component {
     constructor(props) {
         super(props);
-/*        this.state = {
-            starred: this.props.starred
-        };*/
 
         this.removeItem = this.removeItem.bind(this);
         this.toggleStar = this.toggleStar.bind(this);
@@ -24,25 +21,30 @@ export default class Item extends React.Component {
     }
 
     toggleStar() {
-        item.starred ? removeStar.call() : insertStar.call();
+        const item = this.props.item;
+        item.starred ? removeStar.call({itemId: item._id}) : insertStar.call({itemId: item._id});
     }
 
     render() {
-        const { item } = this.props;
+        const { item, editable } = this.props;
 
         return (
-            <div id="{item._id}" className="item">
+            <div id={item._id} className="item">
                 <div className="pic"></div>
                 <div className="info">
                     <h3 className="title">{item.title}</h3>
+                    <h4 className="owner">{item.username}</h4>
                     <p className="description">{item.description}</p>
-                    { item.editable ?
-                        <div className="btns-overlay">
+                    <div className="btns-overlay">
+                        { editable ?
                             <button onClick={this.removeItem}>REMOVE</button>
-                            <button className="{item.starred ? 'starred' : ''}" onClick={this.toggleStar}>STAR</button>
-                        </div>
-                        : ""
-                    }
+                            : null
+                        }
+                        { !!Meteor.userId() ?
+                            <button className={item.starred ? 'starred' : ''} onClick={this.toggleStar}>STAR</button>
+                            : null
+                        }
+                    </div>
                 </div>
             </div>
         );
@@ -50,5 +52,6 @@ export default class Item extends React.Component {
 }
 
 Item.propTypes = {
-    item: React.PropTypes.object
+    item: React.PropTypes.object,
+    editable: React.PropTypes.bool
 };

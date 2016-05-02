@@ -17,8 +17,8 @@ export const insertStar = new ValidatedMethod({
                 'Must be logged in to star an item.');
         }
         return Stars.insert({
-            userID: this.userId,
-            itemID: itemID
+            userId: this.userId,
+            itemId: itemId
         });
     }
 });
@@ -26,12 +26,10 @@ export const insertStar = new ValidatedMethod({
 export const removeStar = new ValidatedMethod({
     name: 'stars.remove',
     validate: new SimpleSchema({
-        id: { type: String }
+        itemId: { type: String }
     }).validator(),
-    run({ id }) {
-        const star = Stars.findOne(id);
-
-        if (!this.userId || this.userId != star.userID) {
+    run({ itemId }) {
+        if (!this.userId) {
             throw new Meteor.Error('items.remove.accessDenied',
             'You don\'t have permission to remove this star.');
         }
@@ -39,8 +37,8 @@ export const removeStar = new ValidatedMethod({
         // XXX the security check above is not atomic, so in theory a race condition could
         // result in exposing private data
 
-        Stars.remove(id);
-    },
+        Stars.remove({userId: this.userId, itemId: itemId});
+    }
 });
 
 // Get list of all method names on Items

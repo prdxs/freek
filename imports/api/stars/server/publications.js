@@ -2,14 +2,14 @@
 
 import { Meteor } from 'meteor/meteor';
 
-import { Lists } from '../stars.js';
+import { Stars } from '../stars.js';
 
 Meteor.publish('stars', function stars() {
   if (!this.userId) {
     return this.ready();
   }
 
-  return Lists.find({
-    userId: this.userId,
+  return Stars.find({
+    userId: this.userId
   });
 });

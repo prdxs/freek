@@ -7,11 +7,12 @@ import ItemListContainer from '../../ui/containers/ItemListContainer.jsx';
 import AuthPageSignIn from '../../ui/pages/AuthPageSignIn.jsx';
 import AuthPageJoin from '../../ui/pages/AuthPageJoin.jsx';
 import NotFoundPage from '../../ui/pages/NotFoundPage.jsx';
+import AboutPage from '../../ui/pages/AboutPage.jsx';
 
 export const renderRoutes = () => (
     <Router history={browserHistory}>
         <Route path="/" component={AppContainer}>
-            <Route path="" component={ItemListContainer}/>
+            <Route path="items" component={ItemListContainer}/>
             <Route path="signin" component={AuthPageSignIn}/>
             <Route path="join" component={AuthPageJoin}/>
             <Route path="about" component={AboutPage}/>
