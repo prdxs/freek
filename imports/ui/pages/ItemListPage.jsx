@@ -6,9 +6,47 @@ import Message from '../components/Message.jsx';
 export default class ItemListPage extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            isSearchInputOn: false,
+            lastSearch: ''
+        }
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            $('.item-list').isotope({
+                itemSelector: '.item',
+                layoutMode: 'fitRows',
+                fitRows: {
+                    gutter: 10
+                }
+            });
+            var that = this;
+            $(document).keyup(function(e) {
+                let k = e.keyCode;
+
+                if (k == 13 && that.state.isSearchInputOn) {
+                    $('.item-list').isotope({
+                        filter: function(){
+                            return $(this).find('.title').text().toLowerCase().search($('.search').val().toLowerCase()) !== -1;
+                        }
+                    });
+                    that.setState({ isSearchInputOn: false });
+                } else if (k == 13) {
+                    that.setState({ isSearchInputOn: true });
+                    $('.search').focus();
+                }
+            });
+        }, 500);
+    }
+
+    componentWillUnmount() {
+        $(document).off('keyup');
     }
 
     render() {
+        const { isSearchInputOn } = this.state;
         const { user, loading, isStarFilterOn, items } = this.props;
 
         let Items;
@@ -19,7 +57,7 @@ export default class ItemListPage extends React.Component {
             Items = (
                 <Message
                     title="No hay items"
-                    subtitle={!user ? "Logueate para compartir" : "Crea un nuevo item con el botón +"}
+                    subtitle={!user ? "Logueate para compartir" : "Añade un nuevo item"}
                 />
             );
         } else {
@@ -33,9 +71,16 @@ export default class ItemListPage extends React.Component {
         }
 
         return (
-            <div className="page item-page">
-                <div className="item-list">
-                    {Items}
+            <div>
+                { isSearchInputOn ?
+                    <div className="modal-overlay animated zoomIn">
+                        <input className="search" placeholder="Buscar..." autofocus/>
+                    </div> : null
+                }
+                <div className="page item-page">
+                    <div className="item-list">
+                        {Items}
+                    </div>
                 </div>
             </div>
         );

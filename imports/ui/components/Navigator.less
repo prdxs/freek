@@ -1,37 +1,31 @@
-@import '{}/imports/ui/stylesheets/utils.less';
-
 nav.navbar {
-  margin: 20px;
-  border: 2px solid black;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50px;
+    margin: 20px;
+    border: 2px solid @red;
+    background-color: @red;
 
-  .btn-secondary {
-    .font-s1;
-    padding-top: .5em;
-    padding-bottom: .5em;
-  }
+    .navbar-btn {
 
-  &.vertical .btn-secondary {
-    .force-wrap;
-    padding-right: 2.5em;
-    text-align: left;
-    text-indent: 0;
-    white-space: normal; // Resets wrapping
-    width: 100%;
+        display: inline-block;
+        width: auto;
+        background: @red;
+        padding: 15px 10px;
 
-    & + .btn-secondary {
-      margin-top: .5rem;
+        transition: all 200ms ease-in;
 
-      &:before {
-        .position(absolute, -.5rem, 50%, auto, auto, 1px, .5rem);
-        background: lighten(#517096, 5%);
-        content: '';
-      }
+        a {
+          color: @brown;
+          font-size: 20px;
+          font-weight: bold;
+        }
+
+        &:hover, &.active {
+            background: @brown;
+            a { color: @red; }
+        }
     }
-
-    [class^="icon-"],
-    [class*=" icon-"] {
-      .position(absolute, .5em, .5em, auto, auto);
-      line-height: 20px;
-    }
-  }
 }

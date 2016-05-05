@@ -1,0 +1,86 @@
+.modal-overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: lightgrey;
+  z-index: 10;
+
+  .modal {
+
+    max-width: 600px;
+    margin: 90px auto 0;
+    padding: 0 20px;
+    border: 2px solid black;
+    background: white;
+    color: black;
+
+    input, textarea {
+      width: 100%;
+    }
+
+    .btn.close {
+      margin-top: 10px;
+      margin-right: -10px;
+      &:hover {
+        color: @red;
+      }
+    }
+
+    .modal-title {
+      color: @red;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      font-size: 30px;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 40px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .dropzone {
+      overflow: hidden;
+      width: 100%;
+      height: 300px;
+      border: 2px dashed @black;
+      cursor: pointer;
+      margin-bottom: 20px;
+      box-sizing: border-box;
+      img {
+        width: 200px;
+        border: 1px solid @black;
+        margin: 10px;
+      }
+    }
+
+    .description {
+      margin-bottom: 20px;
+    }
+
+    button[type="submit"] {
+      width: 100px;
+      height: 50px;
+      outline: none;
+
+      &:hover{
+        background-color: @white;
+        .save {
+          color: @red;
+        }
+      }
+    }
+
+    .error-list .error-msg {
+      text-align: center;
+      background: @yellow;
+      margin-bottom: 10px;
+      border: 2px solid @red;
+      padding: 10px;
+    }
+
+  }
+}

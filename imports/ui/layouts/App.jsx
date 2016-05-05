@@ -23,7 +23,7 @@ export default class App extends React.Component {
     }
 
     componentDidMount() {
-        /* XXX Don't understand */
+        /* XXX External JavaScript libraries need this kind of hook */
         setTimeout(() => {
             /* eslint-disable react/no-did-mount-set-state */
             this.setState({ showConnectionIssue: true });

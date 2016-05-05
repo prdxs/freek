@@ -30,21 +30,23 @@ export default class Item extends React.Component {
 
         return (
             <div id={item._id} className="item">
-                <div className="pic"></div>
+                <div className="pic" styles={`background: url('${item.images[0].url()} center center;`}>
+                    { !!Meteor.userId() ?
+                        <div className="btns-overlay">
+                            { editable ?
+                                <i className="btn item-btn material-icons" onClick={this.removeItem}>delete</i>
+                                : <i className="btn item-btn material-icons">chat_bubble</i>
+                            }
+                            <i className="btn item-btn material-icons" onClick={this.toggleStar}>{item.starred ? 'star' : 'star_border'}</i>
+                        </div>
+                        : null
+                    }
+                    <img src={item.images[0].url()} />
+                </div>
                 <div className="info">
                     <h3 className="title">{item.title}</h3>
                     <h4 className="owner">{item.username}</h4>
                     <p className="description">{item.description}</p>
-                    <div className="btns-overlay">
-                        { editable ?
-                            <button onClick={this.removeItem}>REMOVE</button>
-                            : null
-                        }
-                        { !!Meteor.userId() ?
-                            <button className={item.starred ? 'starred' : ''} onClick={this.toggleStar}>STAR</button>
-                            : null
-                        }
-                    </div>
                 </div>
             </div>
         );

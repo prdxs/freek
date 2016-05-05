@@ -1,17 +1,30 @@
-import { FS } from 'meteor/cfs:standard-packages';
-import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 
 var createThumb = function(fileObj, readStream, writeStream) {
-    gm(readStream, fileObj.name()).resize('256', '256').stream().pipe(writeStream);
+    gm(readStream, fileObj.name()).resize('200','300','^').gravity('Center').crop('200', '300').repage('+').stream().pipe(writeStream);
 };
 
 var createMedium = function(fileObj, readStream, writeStream) {
-    gm(readStream, fileObj.name()).resize('800', '800').stream().pipe(writeStream);
+    gm(readStream, fileObj.name()).resize('800', '800', '^').gravity('center').crop('800', '800').repage('+').stream().pipe(writeStream);
 };
 
-Images = new FS.Collection("images", {
+export const Images = new FS.Collection("images", {
     stores: [
         new FS.Store.GridFS("thumbs", { transformWrite: createThumb }),
         new FS.Store.GridFS("medium", { transformWrite: createMedium })
     ]
+});
+
+// Allow all client-side updates since https://github.com/CollectionFS/Meteor-CollectionFS#using-insert-properly
+// XXX Won't work I think
+Images.allow({
+    insert() {
+        return true;
+    },
+    update() {
+        return true;
+    },
+    remove() {
+        return true;
+    },
+    download(userId, im) { return true; }
 });

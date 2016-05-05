@@ -24,7 +24,7 @@ Stars.attachSchema(Stars.schema);
 Stars.publicFields = {
     _id: 1,
     userId: 1,
-    itemID: 1
+    itemId: 1
 };
 
 // Factory.define('star', Stars, {});

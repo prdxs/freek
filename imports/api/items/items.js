@@ -2,10 +2,18 @@ import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { Factory } from 'meteor/factory';
 import { Stars } from '../stars/stars.js';
+import { Images } from '../images/images.js';
 
 class ItemsCollection extends Mongo.Collection {
     remove(id, callback) {
-        Stars.remove({ userID: this.userId, itemID: id });
+        const item = this.findOne(id);
+        if (item) {
+            console.log(item);
+            item.imRefs.forEach(function(ref) {
+                Images.remove(ref);
+            });
+        }
+        Stars.remove({ itemId: id });
         return super.remove(id, callback);
     }
 }
@@ -24,7 +32,12 @@ Items.schema = new SimpleSchema({
     description: { type: String },
     createdAt: { type: Date },
     owner: { type: String },
-    username: {type: String }
+    username: { type: String },
+    imRefs: {
+        type: [String],
+        minCount: 1,
+        maxCount: 4
+    }
 });
 
 Items.attachSchema(Items.schema);
@@ -37,7 +50,8 @@ Items.publicFields = {
     description: 1,
     createdAt: 1,
     owner: 1,
-    username: 1
+    username: 1,
+    imRefs: 1
 };
 
 Factory.define('item', Items, {});
@@ -50,7 +64,7 @@ Items.helpers({
 
         return this.userId === userId;
     },
-    stars() {
-        return Todos.find({ userID: this._id });
+    stars(itemId) {
+        return Stars.find({ itemId: itemId });
     }
 });

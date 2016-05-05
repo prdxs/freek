@@ -6,7 +6,8 @@ export default class Navigator extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isDropdownOn: false
+            isDropdownOn: false,
+            isStarFilterOn: !!Session.get('isStarFilterOn')
         };
         this.toggleStarFilter = this.toggleStarFilter.bind(this);
         this.toggleDropdown = this.toggleDropdown.bind(this);
@@ -15,6 +16,7 @@ export default class Navigator extends React.Component {
     toggleStarFilter(e) {
         e.stopPropagation();
         Session.set('isStarFilterOn', !Session.get('isStarFilterOn'));
+        this.setState({ isStarFilterOn: !this.state.isStarFilterOn});
     }
 
     toggleDropdown(e) {
@@ -26,18 +28,20 @@ export default class Navigator extends React.Component {
 
     renderLoggedIn() {
         const { user, isNewItemFormOn, toggleNewItemForm, logout } = this.props;
-        const { isDropdownOn } = this.state;
+        const { isDropdownOn, isStarFilterOn } = this.state;
         const email = user.emails[0].address;
         const emailLocalPart = email.substring(0, email.indexOf('@'));
 
         return (
             <nav className="navbar">
-                <Link to="/items" className="logo-btn">FREEK</Link>
-                <a href="#" className={`navbar-btn${isNewItemFormOn ? ' active' : ''}`} onClick={toggleNewItemForm}>Añade</a>
-                <a href="#" className={`navbar-btn${Session.get('isStarFilterOn') ? ' active' : ''}`} onClick={this.toggleStarFilter}>Star</a>
-                <Link to="/about" className="navbar-btn">About</Link>
-                <a href="#" className={`navbar-btn${isDropdownOn ? ' active' : ''}`} onClick={this.toggleDropdown}>Settings</a>
-                <a href="#" className="navbar-btn" onClick={logout}>Sign out</a>
+                <div className="btn navbar-btn"><Link to="/items">FREEK</Link></div>
+                <div className="pull-right">
+                    <div className={`btn navbar-btn${isNewItemFormOn ? ' active' : ''}`}><a href="#" onClick={toggleNewItemForm}>Añade</a></div>
+                    <div className={`btn navbar-btn${isStarFilterOn ? ' active' : ''}`}><a href="#" onClick={this.toggleStarFilter}>Star</a></div>
+                    <div className="btn navbar-btn"><Link to="/about">About</Link></div>
+                    <div className={`btn navbar-btn${isDropdownOn ? ' active' : ''}`}><a href="#" onClick={this.toggleDropdown}>Settings</a></div>
+                    <div className="btn navbar-btn"><a href="#" onClick={logout}>Sign out</a></div>
+                </div>
             </nav>
         );
     }
@@ -45,9 +49,11 @@ export default class Navigator extends React.Component {
     renderLoggedOut() {
         return (
             <nav className="navbar">
-                <Link to="/items" className="logo-btn">FREEK</Link>
-                <Link to="/about" className="navbar-btn">About</Link>
-                <Link to="/signin" className="navbar-btn">Sign in</Link>
+                <div className="btn navbar-btn"><Link to="/items">FREEK</Link></div>
+                <div className="pull-right">
+                    <div className="btn navbar-btn"><Link to="/about">About</Link></div>
+                    <div className="btn navbar-btn"><Link to="/signin">Sign in</Link></div>
+                </div>
             </nav>
         );
     }

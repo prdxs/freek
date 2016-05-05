@@ -1,0 +1,62 @@
+
+.item {
+  position: relative;
+  width: 200px;
+  height: 300px;
+  float: left;
+  overflow: hidden;
+  margin-bottom: 10px;
+
+  .pic {
+    width: 200px;
+    height: 200px;
+
+    .btns-overlay {
+      position: absolute;
+      box-sizing: border-box;
+      width: 200px;
+      height: 300px;
+      padding: 20px;
+      background: darkgray;
+      opacity: 0;
+      transition: opacity 0.2s ease-in;
+
+      .item-btn {
+        width: 30px;
+        font-size: 30px;
+        display: block;
+        margin: 20px auto;
+        text-align: center;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .info {
+    position: absolute;
+    bottom: -50px;
+    width: 200px;
+    height: 50px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    color: @black;
+    border: 1px solid @black;
+    background: @yellow;
+    padding: 10px;
+    transition: bottom 0.2s ease-in;
+
+    .owner {
+      margin-bottom: 10px;
+    }
+  }
+
+  &:hover {
+    .pic .btns-overlay {
+        opacity: 1;
+    }
+    .info {
+      bottom: 0px;
+    }
+  }
+}

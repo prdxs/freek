@@ -10,9 +10,14 @@ export const insertItem = new ValidatedMethod({
     name: 'items.insert',
     validate: new SimpleSchema({
         title: { type: String },
-        description: { type: String }
+        description: { type: String },
+        imRefs: {
+            type: [String],
+            minCount: 1,
+            maxCount: 4
+        }
     }).validator(),
-    run({ title, description }) {
+    run({ title, description, imRefs }) {
         if (!this.userId) {
             throw new Meteor.Error('items.insert.notLoggedIn',
                 'Must be logged in to post a new item.');
@@ -22,7 +27,8 @@ export const insertItem = new ValidatedMethod({
             description: description,
             createdAt: new Date(),
             owner: this.userId,
-            username: Meteor.user().username
+            username: Meteor.user().username,
+            imRefs: imRefs
         });
     }
 });
@@ -49,9 +55,9 @@ export const updateItem = new ValidatedMethod({
             $set: {
                 title: title,
                 description: description
-            },
+            }
         });
-    },
+    }
 });
 
 export const removeItem = new ValidatedMethod({
@@ -70,8 +76,10 @@ export const removeItem = new ValidatedMethod({
         // XXX the security check above is not atomic, so in theory a race condition could
         // result in exposing private data
 
+
+
         Items.remove(id);
-    },
+    }
 });
 
 // Get list of all method names on Items
@@ -89,6 +97,6 @@ if (Meteor.isServer) {
         },
 
         // Rate limit per connection ID
-        connectionId() { return true; },
+        connectionId() { return true; }
     }, 5, 1000);
 }
