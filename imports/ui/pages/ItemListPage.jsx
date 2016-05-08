@@ -1,3 +1,5 @@
+import { Session } from 'meteor/session'; // XXX SESSION
+import { _ } from 'meteor/underscore';
 import React from 'react';
 import Item from '../components/Item.jsx';
 import Loading from '../components/Loading.jsx';
@@ -14,6 +16,7 @@ export default class ItemListPage extends React.Component {
     }
 
     componentDidMount() {
+        console.log('componentDidMount');
         setTimeout(() => {
             $('.item-list').isotope({
                 itemSelector: '.item',
@@ -27,12 +30,13 @@ export default class ItemListPage extends React.Component {
                 let k = e.keyCode;
 
                 if (k == 13 && that.state.isSearchInputOn) {
-                    $('.item-list').isotope({
-                        filter: function(){
-                            return $(this).find('.title').text().toLowerCase()
-                                .search($('.search').val().toLowerCase()) !== -1;
-                        }
-                    });
+                    // $('.item-list').isotope({
+                    //     filter: function(){
+                    //         return $(this).find('.title').text().toLowerCase()
+                    //             .search($('.search').val().toLowerCase()) !== -1;
+                    //     }
+                    // });
+                    Session.set('searchInput', $('.search').val());
                     that.setState({ isSearchInputOn: false });
                 } else if (k == 13) {
                     that.setState({ isSearchInputOn: true });
@@ -42,13 +46,18 @@ export default class ItemListPage extends React.Component {
         }, 500);
     }
 
-    componentWillReceiveProps(nextProps) {
-        console.log($('.item-list').data('isotope'));
-        if (nextProps.isStarFilterOn) {
-            $('.item-list').isotope({ filter: '.starred' });
-        } else if (!!$('.item-list').data('isotope')) {
-            console.log("star filter off");
-            $('.item-list').isotope({ filter: '' });
+    // componentWillReceiveProps(nextProps) {
+    //     console.log('componentWillReceiveProps');
+    //     // List removed and added items
+    //     removedItems = nextProps.items.map(i => i.__originalId);
+    //     if (!!$('.item-list').data('isotope')) {
+    //         //$('.item-list').isotope({ filter: '' });
+    //     }
+    // }
+
+    componentDidUpdate() {
+        if (!!$('.item-list').data('isotope')) {
+            $('.item-list').isotope('reloadItems');
         }
     }
 
@@ -76,7 +85,7 @@ export default class ItemListPage extends React.Component {
         } else {
             Items = items.map(item => (
                 <Item
-                    key={item._id}
+                    key={item.__originalId}
                     item={item}
                     editable={user ? (user._id === item.owner) : false}
                 />
@@ -86,7 +95,7 @@ export default class ItemListPage extends React.Component {
         return (
             <div>
                 { isSearchInputOn ?
-                    <div className="modal-overlay">
+                    <div className="modal-overlay ">
                         <input className="search" placeholder="Buscar..." autofocus/>
                     </div> : null
                 }
