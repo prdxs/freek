@@ -29,7 +29,8 @@ export default class ItemListPage extends React.Component {
                 if (k == 13 && that.state.isSearchInputOn) {
                     $('.item-list').isotope({
                         filter: function(){
-                            return $(this).find('.title').text().toLowerCase().search($('.search').val().toLowerCase()) !== -1;
+                            return $(this).find('.title').text().toLowerCase()
+                                .search($('.search').val().toLowerCase()) !== -1;
                         }
                     });
                     that.setState({ isSearchInputOn: false });
@@ -41,11 +42,23 @@ export default class ItemListPage extends React.Component {
         }, 500);
     }
 
+    componentWillReceiveProps(nextProps) {
+        console.log($('.item-list').data('isotope'));
+        if (nextProps.isStarFilterOn) {
+            $('.item-list').isotope({ filter: '.starred' });
+        } else if (!!$('.item-list').data('isotope')) {
+            console.log("star filter off");
+            $('.item-list').isotope({ filter: '' });
+        }
+    }
+
     componentWillUnmount() {
+        console.log('componentWillUnmount');
         $(document).off('keyup');
     }
 
     render() {
+        console.log('ItemListPage render');
         const { isSearchInputOn } = this.state;
         const { user, loading, isStarFilterOn, items } = this.props;
 
@@ -61,7 +74,7 @@ export default class ItemListPage extends React.Component {
                 />
             );
         } else {
-            Items = items.filter(item => !isStarFilterOn || item.starred).map(item => (
+            Items = items.map(item => (
                 <Item
                     key={item._id}
                     item={item}
@@ -73,7 +86,7 @@ export default class ItemListPage extends React.Component {
         return (
             <div>
                 { isSearchInputOn ?
-                    <div className="modal-overlay animated zoomIn">
+                    <div className="modal-overlay">
                         <input className="search" placeholder="Buscar..." autofocus/>
                     </div> : null
                 }

@@ -12,19 +12,23 @@ export default class JoinPage extends React.Component {
 
   onSubmit(event) {
     event.preventDefault();
+    const username = this.refs.username.value;
     const email = this.refs.email.value;
     const password = this.refs.password.value;
     const confirm = this.refs.confirm.value;
     const errors = {};
 
+    if (!username) {
+        errors.username = 'Nombre de usuario requerido';
+    }
     if (!email) {
-      errors.email = 'Email required';
+      errors.email = 'Correo electrónico requerido';
     }
     if (!password) {
-      errors.password = 'Password required';
+      errors.password = 'Contraseña requerida';
     }
     if (confirm !== password) {
-      errors.confirm = 'Please confirm your password';
+      errors.confirm = 'Por favor, confirma tu contraseña';
     }
 
     this.setState({ errors });
@@ -33,6 +37,7 @@ export default class JoinPage extends React.Component {
     }
 
     Accounts.createUser({
+      username,
       email,
       password
     }, err => {
@@ -60,6 +65,10 @@ export default class JoinPage extends React.Component {
               <div className="list-item" key={msg}>{msg}</div>
             ))}
           </div>
+          <div className={`input-symbol ${errorClass('username')}`}>
+            <input type="text" name="username" ref="username" placeholder="Nombre de usuario"/>
+            <span className="icon-username" title="Tu nombre de usuario"></span>
+          </div>
           <div className={`input-symbol ${errorClass('email')}`}>
             <input type="email" name="email" ref="email" placeholder="Your Email"/>
             <span className="icon-email" title="Your Email"></span>
@@ -72,7 +81,7 @@ export default class JoinPage extends React.Component {
             <input type="password" name="confirm" ref="confirm" placeholder="Confirm Password"/>
             <span className="icon-lock" title="Confirm Password"></span>
           </div>
-          <button type="submit" className="btn-primary">Join Now</button>
+          <button type="submit" className="btn-primary">Regístrate</button>
         </form>
       </div>
     );

@@ -25,34 +25,34 @@ Meteor.startup(() => {
             profile: { name: 'Jimmy' }
         });
     }
-    if (Items.find().count() === 0) {
-        console.log(Meteor.users.findOne({username: {$eq: 'user1'}}));
-        const data = [
-            {
-                title: 'Sofá rojo',
-                description: 'Sofá rojo de piel sin magulladuras.',
-                createdAt: new Date(),
-                owner: Meteor.users.findOne({username: {$eq: 'user1'}})._id,
-                username: 'user1'
-            },
-            {
-                title: 'Sillas de madera',
-                description: '4 sillas de madera clásicas en perfectas condiciones.',
-                createdAt: new Date(),
-                owner: Meteor.users.findOne({username: {$eq: 'user2'}})._id,
-                username: 'user2'
-            },
-            {
-                title: 'Mesa grande',
-                description: 'Mesa grande de plástico para terrazas o exteriores.',
-                createdAt: new Date(),
-                owner: Meteor.users.findOne({username: {$eq: 'user3'}})._id,
-                username: 'user3'
-            }
-        ];
-
-        data.forEach((item) => {
-            Items.insert(item);
-        });
-    }
+    // if (Items.find().count() === 0) {
+    //     console.log(Meteor.users.findOne({username: {$eq: 'user1'}}));
+    //     const data = [
+    //         {
+    //             title: 'Sofá rojo',
+    //             description: 'Sofá rojo de piel sin magulladuras.',
+    //             createdAt: new Date(),
+    //             owner: Meteor.users.findOne({username: {$eq: 'user1'}})._id,
+    //             username: 'user1'
+    //         },
+    //         {
+    //             title: 'Sillas de madera',
+    //             description: '4 sillas de madera clásicas en perfectas condiciones.',
+    //             createdAt: new Date(),
+    //             owner: Meteor.users.findOne({username: {$eq: 'user2'}})._id,
+    //             username: 'user2'
+    //         },
+    //         {
+    //             title: 'Mesa grande',
+    //             description: 'Mesa grande de plástico para terrazas o exteriores.',
+    //             createdAt: new Date(),
+    //             owner: Meteor.users.findOne({username: {$eq: 'user3'}})._id,
+    //             username: 'user3'
+    //         }
+    //     ];
+    //
+    //     data.forEach((item) => {
+    //         Items.insert(item);
+    //     });
+    // }
 });

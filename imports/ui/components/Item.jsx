@@ -29,7 +29,7 @@ export default class Item extends React.Component {
         const { item, editable } = this.props;
 
         return (
-            <div id={item._id} className="item">
+            <div id={item._id} className={`item${ item.starred ? ' starred' : '' }`}>
                 <div className="pic" styles={`background: url('${item.images[0].url()} center center;`}>
                     { !!Meteor.userId() ?
                         <div className="btns-overlay">

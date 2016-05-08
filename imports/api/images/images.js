@@ -1,10 +1,11 @@
 
 var createThumb = function(fileObj, readStream, writeStream) {
-    gm(readStream, fileObj.name()).resize('200','300','^').gravity('Center').crop('200', '300').repage('+').stream().pipe(writeStream);
+    //gm(readStream, fileObj.name()).resize('200','300','^').gravity('Center').crop('200', '300').repage('+').stream().pipe(writeStream);
+    gm(readStream, fileObj.name()).resize('200', '300').stream().pipe(writeStream);
 };
 
 var createMedium = function(fileObj, readStream, writeStream) {
-    gm(readStream, fileObj.name()).resize('800', '800', '^').gravity('center').crop('800', '800').repage('+').stream().pipe(writeStream);
+    gm(readStream, fileObj.name()).resize('800', '800').stream().pipe(writeStream);
 };
 
 export const Images = new FS.Collection("images", {

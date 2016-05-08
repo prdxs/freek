@@ -1,6 +1,7 @@
 import { Mongo } from 'meteor/mongo';
 import { SimpleSchema } from 'meteor/aldeed:simple-schema';
 import { Factory } from 'meteor/factory';
+import { EasySearch } from 'meteor/easy:search';
 import { Stars } from '../stars/stars.js';
 import { Images } from '../images/images.js';
 
@@ -67,4 +68,10 @@ Items.helpers({
     stars(itemId) {
         return Stars.find({ itemId: itemId });
     }
+});
+
+export const ItemsIndex = new EasySearch.Index({
+  collection: Items,
+  fields: ['title', 'description'],
+  engine: new EasySearch.MongoTextIndex()
 });

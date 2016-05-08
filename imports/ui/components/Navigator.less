@@ -1,31 +1,32 @@
 nav.navbar {
+
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     height: 50px;
     margin: 20px;
-    border: 2px solid @red;
-    background-color: @red;
+    background-color: @orange;
+    z-index: 10;
 
     .navbar-btn {
 
         display: inline-block;
         width: auto;
-        background: @red;
+        background: @orange;
         padding: 15px 10px;
 
         transition: all 200ms ease-in;
 
         a {
-          color: @brown;
+          color: @gray;
           font-size: 20px;
           font-weight: bold;
         }
 
         &:hover, &.active {
-            background: @brown;
-            a { color: @red; }
+            background: @gray;
+            a { color: @orange; }
         }
     }
 }

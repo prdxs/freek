@@ -15,8 +15,6 @@ export default createContainer(() => {
     items.forEach(item => {
         item.starred = (!Stars.findOne({ itemId: item._id })) ? false : true;
         item.images = item.imRefs.map(imId => Images.findOne(imId));
-        console.log(item.images[0]);
-
     });
     return {
         user: Meteor.user(),
