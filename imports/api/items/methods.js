@@ -23,8 +23,6 @@ export const insertItem = new ValidatedMethod({
                 'Must be logged in to post a new item.');
         }
 
-        console.log("Meteor object on run ValidatedMethod intems.insert");
-        console.log(Meteor);
         return Items.insert({
             title: title,
             description: description,

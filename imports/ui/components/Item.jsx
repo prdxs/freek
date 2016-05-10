@@ -15,8 +15,11 @@ export default class Item extends React.Component {
     }
 
     removeItem() {
+        console.log('Calling remove on Item.jsx');
+        console.log(this.props.item.__originalId);
+
         removeItem.call({
-            id: this.props.item._id
+            id: this.props.item.__originalId
         });
     }
 
@@ -30,7 +33,7 @@ export default class Item extends React.Component {
 
         return (
             <div id={item.__originalId} className={`item${ item.starred ? ' starred' : '' }`}>
-                <div className="pic" styles={`background: url('${item.images[0].url()} center center;`}>
+                <div className="pic">
                     { !!Meteor.userId() ?
                         <div className="btns-overlay">
                             { editable ?

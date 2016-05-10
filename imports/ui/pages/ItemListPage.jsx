@@ -55,10 +55,10 @@ export default class ItemListPage extends React.Component {
     //     }
     // }
 
-    componentDidUpdate() {
-        if (!!$('.item-list').data('isotope')) {
-            $('.item-list').isotope('reloadItems');
-        }
+    componentDidUpdate(prevProps, prevState) {
+        let diff = _.difference(prevProps.items, this.props.items);
+        console.log("difference");
+        console.log(diff);        
     }
 
     componentWillUnmount() {
