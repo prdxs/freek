@@ -16,7 +16,7 @@ export default class ItemListPage extends React.Component {
     }
 
     componentDidMount() {
-        console.log('componentDidMount');
+        // console.log('componentDidMount');
         setTimeout(() => {
             $('.item-list').isotope({
                 itemSelector: '.item',
@@ -56,18 +56,26 @@ export default class ItemListPage extends React.Component {
     // }
 
     componentDidUpdate(prevProps, prevState) {
-        let diff = _.difference(prevProps.items, this.props.items);
+        console.log('Prev item list:');
+        console.log(prevProps.items.map(i => i.__originalId));
+        console.log('Current item list:');
+        console.log(this.props.items.map(i => i.__originalId));
+        let diff = _.difference(this.props.items.map(i => i.__originalId), prevProps.items.map(i => i.__originalId));
         console.log("difference");
-        console.log(diff);        
+        console.log(diff);
+
+        $('.item-list').isotope('addItems', this.props.items.filter(i => _.contains(diff, i.__originalId)));
+        $('.item-list').isotope('layout');
+
     }
 
     componentWillUnmount() {
-        console.log('componentWillUnmount');
+        // console.log('componentWillUnmount');
         $(document).off('keyup');
     }
 
     render() {
-        console.log('ItemListPage render');
+        // console.log('ItemListPage render');
         const { isSearchInputOn } = this.state;
         const { user, loading, isStarFilterOn, items } = this.props;
 

@@ -32,8 +32,8 @@ export default createContainer(() => {
         items = items.filter(i => i.starred);
     }
 
-    console.log('items');
-    console.log(items);
+    // console.log('items');
+    // console.log(items);
 
     return {
         user: Meteor.user(),
