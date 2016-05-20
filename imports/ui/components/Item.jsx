@@ -32,7 +32,7 @@ export default class Item extends React.Component {
                 id={item.__originalId}
                 className={`item${ item.starred ? ' starred' : '' }`}
                 data-date={item.createdAt}>
-                
+
                 <div className="pic">
                     { !!Meteor.userId() ?
                         <div className="btns-overlay">

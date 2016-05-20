@@ -115,11 +115,6 @@ export default class ItemListPage extends React.Component {
 
         return (
             <div>
-                { isSearchInputOn ?
-                    <div className="modal-overlay ">
-                        <input className="search" placeholder="Buscar..." autofocus/>
-                    </div> : null
-                }
                 <div className="page item-page">
                     <div className="item-list" ref="isotopeContainer">
                         {Items}
@@ -131,8 +126,8 @@ export default class ItemListPage extends React.Component {
 }
 
 ItemListPage.propTypes = {
-    user: React.PropTypes.object,
-    loading: React.PropTypes.bool,
     isStarFilterOn: React.PropTypes.bool,
-    items: React.PropTypes.array
+    items: React.PropTypes.array,
+    loading: React.PropTypes.bool,
+    user: React.PropTypes.object
 };

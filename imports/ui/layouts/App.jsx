@@ -1,11 +1,13 @@
+import { Meteor } from 'meteor/meteor';
 import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import { Meteor } from 'meteor/meteor';
 import { Session } from 'meteor/session'; // XXX: SESSION
-import Navigator from '../components/Navigator.jsx';
+
 import ConnectionNotification from '../components/ConnectionNotification.jsx';
-import NewItemForm from '../components/NewItemForm.jsx';
 import Loading from '../components/Loading.jsx';
+import Navigator from '../components/Navigator.jsx';
+import NewItemForm from '../components/NewItemForm.jsx';
+import SearchModal from '../components/SearchModal.jsx';
 
 const CONNECTION_ISSUE_TIMEOUT = 5000;
 
@@ -14,16 +16,19 @@ export default class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showConnectionIssue: false,
-            isNewItemFormOn: false
+            isNewItemFormOn: false,
+            isSearchModalOn: false,
+            showConnectionIssue: false
         };
-        this.toggleNewItemForm = this.toggleNewItemForm.bind(this);
-        this.toggleChat = this.toggleChat.bind(this);
         this.logout = this.logout.bind(this);
+        this.toggleChat = this.toggleChat.bind(this);
+        this.toggleNewItemForm = this.toggleNewItemForm.bind(this);
+        this.toggleSearchModal = this.toggleSearchModal.bind(this);
     }
 
     componentDidMount() {
-        /* XXX External JavaScript libraries need this kind of hook */
+        /* XXX Show connection problem if showConnectionIssue and loading are
+        both true */
         setTimeout(() => {
             /* eslint-disable react/no-did-mount-set-state */
             this.setState({ showConnectionIssue: true });
@@ -34,6 +39,12 @@ export default class App extends React.Component {
         if (!!e) e.preventDefault();
         this.setState({
             isNewItemFormOn: !this.state.isNewItemFormOn
+        });
+    }
+
+    toggleSearchModal() {
+        this.setState({
+            isSearchModalOn: !this.state.isSearchModalOn
         });
     }
 
@@ -68,15 +79,21 @@ export default class App extends React.Component {
         return (
             <div id="container">
                 <Navigator
-                    user={user}
                     isNewItemFormOn={isNewItemFormOn}
+                    logout={this.logout}
                     toggleNewItemForm={this.toggleNewItemForm}
-                    logout={this.logout} />
+                    toggleSearchModal={this.toggleSearchModal}
+                    user={user} />
                 {showConnectionIssue && !connected
                     ? <ConnectionNotification/>
                     : null}
                 {isNewItemFormOn
                     ? <NewItemForm toggleNewItemForm={this.toggleNewItemForm} />
+                    : null}
+                {isSearchModalOn
+                    ? <SearchModal
+                        setSearchTerm={this.setSearchTerm}
+                        toggleSearchModal={this.toggleSearchModal} />
                     : null}
                 <ReactCSSTransitionGroup
                     transitionName="fade"
