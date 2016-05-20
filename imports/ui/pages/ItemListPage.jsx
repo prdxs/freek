@@ -6,67 +6,85 @@ import Loading from '../components/Loading.jsx';
 import Message from '../components/Message.jsx';
 
 export default class ItemListPage extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor(props, context) {
+        super(props, context);
 
         this.state = {
             isSearchInputOn: false,
             lastSearch: ''
+        };
+
+        this.filterFns = {
+            // Show if starred
+            starred: function() {
+                return $(this).hasClass('starred');
+            }
+        };
+
+        this.isoOptions = {
+            itemSelector: '.item',
+            layoutMode: 'masonry',
+            masonry: {
+                columnWidth: 200,
+                gutter: 20
+            },
+            getSortData: {
+                title: '.title',
+                date: '[data-date]'
+            },
+            sortAscending: false
+        };
+
+        this.createIsotopeContainer = this.createIsotopeContainer.bind(this)
+    }
+
+    createIsotopeContainer() {
+        if (this.iso == null) {
+            this.iso = new Isotope(document.querySelector('.item-list'), this.isoOptions)
         }
     }
 
     componentDidMount() {
         // console.log('componentDidMount');
-        setTimeout(() => {
-            $('.item-list').isotope({
-                itemSelector: '.item',
-                layoutMode: 'fitRows',
-                fitRows: {
-                    gutter: 10
-                }
-            });
-            var that = this;
-            $(document).keyup(function(e) {
-                let k = e.keyCode;
+        this.createIsotopeContainer();
 
-                if (k == 13 && that.state.isSearchInputOn) {
-                    // $('.item-list').isotope({
-                    //     filter: function(){
-                    //         return $(this).find('.title').text().toLowerCase()
-                    //             .search($('.search').val().toLowerCase()) !== -1;
-                    //     }
-                    // });
-                    Session.set('searchInput', $('.search').val());
-                    that.setState({ isSearchInputOn: false });
-                } else if (k == 13) {
-                    that.setState({ isSearchInputOn: true });
-                    $('.search').focus();
-                }
-            });
-        }, 500);
+        // Only arrange if there are elements to arrange
+        if (this.props.items.length > 0) {
+            this.iso.arrange({ sortBy: 'date' });
+        }
     }
 
-    // componentWillReceiveProps(nextProps) {
-    //     console.log('componentWillReceiveProps');
-    //     // List removed and added items
-    //     removedItems = nextProps.items.map(i => i.__originalId);
-    //     if (!!$('.item-list').data('isotope')) {
-    //         //$('.item-list').isotope({ filter: '' });
-    //     }
-    // }
+    componentWillReceiveProps(nextProps) {
+        console.log('componentWillReceiveProps');
 
-    componentDidUpdate(prevProps, prevState) {
-        console.log('Prev item list:');
-        console.log(prevProps.items.map(i => i.__originalId));
-        console.log('Current item list:');
-        console.log(this.props.items.map(i => i.__originalId));
-        let diff = _.difference(this.props.items.map(i => i.__originalId), prevProps.items.map(i => i.__originalId));
-        console.log("difference");
-        console.log(diff);
+        if (nextProps.filter && !_.isEqual(nextProps.filter, this.props.filter)) {
+            this.iso.arrange({ filter: this.filterFns[nextProps.filter] || nextProps.filter });
+        }
+        this.iso.arrange({ sortBy: 'date' });
+    }
 
-        $('.item-list').isotope('addItems', this.props.items.filter(i => _.contains(diff, i.__originalId)));
-        $('.item-list').isotope('layout');
+    componentDidUpdate(prevProps) {
+        // The list of keys seen in the previous render
+        let currentKeys = prevProps.items.map(i => i.key);
 
+        // The latest list of keys that have been rendered
+        let newKeys = this.props.items.map(i => i.key);
+
+        // Find which keys are new between the current set of keys and any new children passed to this component
+        let addKeys = _.difference(newKeys, currentKeys);
+
+        // Find which keys have been remove between the current set of keys and any new children passed to this component
+        let removeKeys = _.difference(currentKeys, newKeys);
+
+        if (removeKeys.length > 0) {
+            this.iso.remove(removeKeys.map(k => document.getElementById(k)));
+            this.iso.layout();
+            this.iso.reloadItems();
+        }
+
+        if (addKeys.length > 0) {
+            this.iso.insert(addKeys.map(k => document.getElementById(k)));
+        }
     }
 
     componentWillUnmount() {
@@ -79,6 +97,9 @@ export default class ItemListPage extends React.Component {
         const { isSearchInputOn } = this.state;
         const { user, loading, isStarFilterOn, items } = this.props;
 
+        console.log('Items');
+        console.log(items);
+
         let Items;
         if (loading) {
             Items = <Loading/>;
@@ -90,15 +111,7 @@ export default class ItemListPage extends React.Component {
                     subtitle={!user ? "Logueate para compartir" : "Añade un nuevo item"}
                 />
             );
-        } else {
-            Items = items.map(item => (
-                <Item
-                    key={item.__originalId}
-                    item={item}
-                    editable={user ? (user._id === item.owner) : false}
-                />
-            ));
-        }
+        } else { Items = items; }
 
         return (
             <div>
@@ -108,7 +121,7 @@ export default class ItemListPage extends React.Component {
                     </div> : null
                 }
                 <div className="page item-page">
-                    <div className="item-list">
+                    <div className="item-list" ref="isotopeContainer">
                         {Items}
                     </div>
                 </div>

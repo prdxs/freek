@@ -26,7 +26,7 @@ export const insertItem = new ValidatedMethod({
         return Items.insert({
             title: title,
             description: description,
-            createdAt: new Date(),
+            createdAt: new Date().toString(),
             owner: this.userId,
             username: Meteor.user().username,
             imRefs: imRefs

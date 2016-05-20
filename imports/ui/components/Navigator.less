@@ -13,20 +13,23 @@ nav.navbar {
 
         display: inline-block;
         width: auto;
+        height: 50px;
         background: @orange;
-        padding: 15px 10px;
+        padding: 0 10px;
 
         transition: all 200ms ease-in;
 
-        a {
-          color: @gray;
-          font-size: 20px;
-          font-weight: bold;
+        color: @gray;
+        font-size: 20px;
+        font-weight: bold;
+
+        a& {
+            display: ;
         }
 
         &:hover, &.active {
             background: @gray;
-            a { color: @orange; }
+            color: @orange;
         }
     }
 }

@@ -1,6 +1,5 @@
 import { Meteor } from 'meteor/meteor';
 import React from 'react';
-import { _ } from 'meteor/underscore';
 import { displayError } from '../helpers/errors.js';
 
 import { removeItem } from '../../api/items/methods.js';
@@ -15,9 +14,6 @@ export default class Item extends React.Component {
     }
 
     removeItem() {
-        console.log('Calling remove on Item.jsx');
-        console.log(this.props.item.__originalId);
-
         removeItem.call({
             id: this.props.item.__originalId
         });
@@ -32,7 +28,11 @@ export default class Item extends React.Component {
         const { item, editable } = this.props;
 
         return (
-            <div id={item.__originalId} className={`item${ item.starred ? ' starred' : '' }`}>
+            <div
+                id={item.__originalId}
+                className={`item${ item.starred ? ' starred' : '' }`}
+                data-date={item.createdAt}>
+                
                 <div className="pic">
                     { !!Meteor.userId() ?
                         <div className="btns-overlay">

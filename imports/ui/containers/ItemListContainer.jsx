@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+import React from 'react';
 import { createContainer } from 'meteor/react-meteor-data';
 import { Session } from 'meteor/session'; // XXX SESSION
 
@@ -6,6 +7,7 @@ import { Items, ItemsIndex } from '../../api/items/items.js';
 import { Stars } from '../../api/stars/stars.js';
 import { Images } from '../../api/images/images.js';
 
+import Item from '../components/Item.jsx';
 import ItemListPage from '../pages/ItemListPage.jsx';
 
 export default createContainer(() => {
@@ -32,13 +34,14 @@ export default createContainer(() => {
         items = items.filter(i => i.starred);
     }
 
-    // console.log('items');
-    // console.log(items);
-
+    const user = Meteor.user();
     return {
-        user: Meteor.user(),
+        user: user,
         loading: loading,
-        isStarFilterOn: !!Meteor.userId() && !!Session.get('isStarFilterOn'),
-        items: items
+        isStarFilterOn: !!user && !!Session.get('isStarFilterOn'),
+        items: items.map(i => (<Item
+                key={i.__originalId}
+                item={i}
+                editable={user ? (user._id === i.owner) : false} />))
     };
 }, ItemListPage);

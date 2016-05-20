@@ -34,13 +34,13 @@ export default class Navigator extends React.Component {
 
         return (
             <nav className="navbar">
-                <div className="btn navbar-btn"><Link to="/items">FREEK</Link></div>
+                <Link className="btn navbar-btn" to="/items">FREEK</Link>
                 <div className="pull-right">
-                    <div className={`btn navbar-btn${isNewItemFormOn ? ' active' : ''}`}><a href="#" onClick={toggleNewItemForm}>Añade</a></div>
-                    <div className={`btn navbar-btn${isStarFilterOn ? ' active' : ''}`}><a href="#" onClick={this.toggleStarFilter}>Star</a></div>
-                    <div className="btn navbar-btn"><Link to="/about">About</Link></div>
-                    <div className={`btn navbar-btn${isDropdownOn ? ' active' : ''}`}><a href="#" onClick={this.toggleDropdown}>Settings</a></div>
-                    <div className="btn navbar-btn"><a href="#" onClick={logout}>Sign out</a></div>
+                    <button onClick={toggleNewItemForm} className={`btn navbar-btn${isNewItemFormOn ? ' active' : ''}`}>Añade</button>
+                    <button  onClick={this.toggleStarFilter} className={`btn navbar-btn${isStarFilterOn ? ' active' : ''}`}>Star</button>
+                    <Link className="btn navbar-btn" to="/about">About</Link>
+                    <button onClick={this.toggleDropdown} className={`btn navbar-btn${isDropdownOn ? ' active' : ''}`}>Settings</button>
+                    <button href="#" onClick={logout} className="btn navbar-btn">Sign out</button>
                 </div>
             </nav>
         );
