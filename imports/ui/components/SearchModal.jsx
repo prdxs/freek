@@ -9,11 +9,20 @@ export default class SearchModal extends React.Component {
         this.onSubmit = this.onSubmit.bind(this);
     }
 
+    componentDidMount() {
+        $('#searchModal').modal('show');
+    }
+
+    componentWillUnmount() {
+        $('#searchModal').modal('hide');
+    }
+
     onSubmit(e) {
         e.preventDefault();
         this.props.setSearchTerm(this.refs.search.value);
         this.props.toggleSearchModal();
     }
+
     render() {
         const { toggleSearchModal } = this.props;
 

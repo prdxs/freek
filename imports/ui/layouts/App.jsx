@@ -8,6 +8,7 @@ import Loading from '../components/Loading.jsx';
 import Navigator from '../components/Navigator.jsx';
 import NewItemModal from '../components/NewItemModal.jsx';
 import SearchModal from '../components/SearchModal.jsx';
+import SigninModal from '../components/SigninModal.jsx';
 
 const CONNECTION_ISSUE_TIMEOUT = 5000;
 
@@ -18,7 +19,8 @@ export default class App extends React.Component {
         this.state = {
             modals: {
                 showNewItemModal: false,
-                showSearchModal: false
+                showSearchModal: false,
+                showSigninModal: false
             },
             notifications: {
                 showConnectionIssue: false
@@ -29,6 +31,7 @@ export default class App extends React.Component {
         this.setSearchTerm = this.setSearchTerm.bind(this);
         this.toggleNewItemModal = this.toggleNewItemModal.bind(this);
         this.toggleSearchModal = this.toggleSearchModal.bind(this);
+        this.toggleSigninModal = this.toggleSigninModal.bind(this);
     }
 
     componentDidMount() {
@@ -52,26 +55,43 @@ export default class App extends React.Component {
 
     toggleNewItemModal() {
         if (this.state.modals.showNewItemModal) {
-            console.log('deactivating new item modal');
             this.state.modals.showNewItemModal = false;
             this.setState(this.state);
-            console.log(this.state);
         } else {
-            console.log('activating new item modal');
-            this.state.modals = { showNewItemModal: true, showSearchModal: false };
+            this.state.modals = {
+                showNewItemModal: true,
+                showSearchModal: false,
+                showSigninModal: false
+            };
             this.setState(this.state);
-            console.log(this.state);
         }
     }
 
     toggleSearchModal() {
         if (this.state.modals.showSearchModal) {
-            this.setState({ modals: { showSearchModal: false } });
+            this.state.modals.showSearchModal = false;
+            this.setState(this.state);
         } else {
-            this.setState({ modals: {
+            this.state.modals = {
                 showNewItemModal: false,
-                showSearchModal: true
-            } });
+                showSearchModal: true,
+                showSigninModal: false
+            };
+            this.setState(this.state);
+        }
+    }
+
+    toggleSigninModal() {
+        if (this.state.modals.showSigninModal) {
+            this.state.modals.showSigninModal = false;
+            this.setState(this.state);
+        } else {
+            this.state.modals = {
+                showNewItemModal: false,
+                showSearchModal: false,
+                showSigninModal: true
+            };
+            this.setState(this.state);
         }
     }
 
@@ -105,6 +125,8 @@ export default class App extends React.Component {
                     <SearchModal setSearchTerm={this.setSearchTerm}
                                  toggleSearchModal={this.toggleSearchModal} /> : null }
 
+                { modals.showSigninModal ?
+                    <SigninModal toggleSigninModal={this.toggleSigninModal} /> : null }
 
                 { notifications.showConnectionIssue && !connected ?
                     <ConnectionNotification/> : null }
@@ -115,6 +137,7 @@ export default class App extends React.Component {
                     logout={this.logout}
                     toggleNewItemModal={this.toggleNewItemModal}
                     toggleSearchModal={this.toggleSearchModal}
+                    toggleSigninModal={this.toggleSigninModal}
                     user={user} />
 
 

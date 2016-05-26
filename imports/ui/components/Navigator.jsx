@@ -33,6 +33,7 @@ export default class Navigator extends React.Component {
             logout,
             toggleNewItemModal,
             toggleSearchModal,
+            toggleSigninModal,
             user
         } = this.props;
         const { isDropdownOn, isStarFilterOn } = this.state;
@@ -103,7 +104,7 @@ export default class Navigator extends React.Component {
                         <ul className="nav navbar-nav navbar-right">
                             <li><a href="javascript:void(0)" onClick={this.props.toggleSearchModal}>Buscar</a></li>
                             <li><Link activeClassName="active" to="/about">About</Link></li>
-                            <li><Link activeClassName="active" to="/signin">Signin</Link></li>
+                            <li><a href="javascript:void(0)" onClick={this.props.toggleSigninModal}>Signin</a></li>
                         </ul>
                     </div>
                 </div>
@@ -123,5 +124,6 @@ Navigator.propTypes = {
     logout: React.PropTypes.func,
     toggleNewItemModal: React.PropTypes.func,
     toggleSearchModal: React.PropTypes.func,
+    toggleSigninModal: React.PropTypes.func,
     user: React.PropTypes.object
 };

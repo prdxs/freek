@@ -5,7 +5,7 @@ import React from 'react';
 import { Link } from 'react-router';
 
 
-export default class NewItemModal extends React.Component {
+export default class SigninModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = { errors: {} };
@@ -47,10 +47,11 @@ export default class NewItemModal extends React.Component {
                 this.context.router.push('/items');
             }
         });
+        this.props.toggleSigninModal();
     }
 
     render() {
-        const { toggleNewItemModal } = this.props;
+        const { toggleSigninModal } = this.props;
         const { errors } = this.state;
         const errorMessages = Object.keys(errors).map(key => errors[key]);
         const errorClass = key => errors[key] && 'error';
@@ -65,7 +66,7 @@ export default class NewItemModal extends React.Component {
                 <div className="modal-dialog modal-lg" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <button type="button" className="close" aria-label="Close"onClick={toggleSigninModal}>
+                            <button type="button" className="close" aria-label="Close" onClick={toggleSigninModal}>
                                 <i className="material-icons">close</i>
                             </button>
                             <h4 className="modal-title" id="signinModalLabel">Sign in</h4>
@@ -88,7 +89,6 @@ export default class NewItemModal extends React.Component {
                                        placeholder="Contraseña"
                                        ref="password"
                                        type="password" />
-
                             </form>
                         </div>
                         <div className="modal-footer">
@@ -98,12 +98,11 @@ export default class NewItemModal extends React.Component {
                         </div>
                     </div>
                 </div>
-
             </div>
         );
     }
 }
 
-NewItemModal.propTypes = {
-    toggleNewItemModal: React.PropTypes.func
+SigninModal.propTypes = {
+    toggleSigninModal: React.PropTypes.func
 };
