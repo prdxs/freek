@@ -1,0 +1,88 @@
+.modal-freek {
+
+  .modal-content {
+    border-radius: 0;
+    .modal-header {
+      background: @orange;
+      .modal-title {
+        color: @gray;
+        font-size: 30px;
+        text-align: center;
+      }
+      .close {
+        color: @gray;
+        height: 24px;
+        opacity: 1;
+        text-shadow: none;
+      }
+    }
+    .modal-body {
+      padding: 20px;
+      .error-list {
+        list-style: none;
+        padding: 0;
+      }
+      input {
+        width: 100%;
+      }
+      .dropzone {
+        overflow: hidden;
+        width: 100%;
+        height: 300px;
+        border: 2px dashed @darkGray;
+        cursor: pointer;
+        margin-bottom: 20px;
+        padding: 20px;
+        box-sizing: border-box;
+        img {
+          width: 200px;
+          border: 1px solid @black;
+          margin: 10px;
+        }
+        &.error {
+          border-color: @error;
+        }
+      }
+      textarea {
+        resize: none;
+        width: 100%;
+      }
+    }
+    .modal-footer {
+      padding: 20px;
+    }
+  }
+
+  .title {
+    font-size: 40px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .description {
+    margin-bottom: 20px;
+  }
+
+  button[type="submit"] {
+    border-radius: 0;
+    width: 100px;
+    height: 50px;
+    outline: none;
+
+    &:hover{
+      background-color: @white;
+      .save {
+        color: @orange;
+      }
+    }
+  }
+
+  .error-list .error-msg {
+    text-align: center;
+    background: @yellow;
+    margin-bottom: 10px;
+    border: 2px solid @orange;
+    padding: 10px;
+  }
+
+}
