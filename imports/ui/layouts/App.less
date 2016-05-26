@@ -1,3 +1,47 @@
-#container {
-  margin: 90px 20px 20px 20px;
+* {
+  outline: none !important;
+  border-radius: 0 !important;
+  -webkit-user-select: none !important;;  /* Chrome all / Safari all */
+  -moz-user-select: none !important;;     /* Firefox all */
+  -ms-user-select: none !important;;      /* IE 10+ */
+  user-select: none !important;          /* Likely future */
+}
+
+body {
+  background: @gray;
+}
+
+.container-freek {
+  margin: 80px 20px 0;
+}
+
+button, input, textarea {
+  -moz-box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+}
+
+input {
+  border-top: 0;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 2px solid @darkGray;
+  &:hover, &:focus {
+    border-color: @orange;
+  }
+  &.error {
+    border-color: @error;
+  }
+}
+textarea {
+  border-top: 2px solid @darkGray;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+  &:hover, &:focus {
+    border-color: @orange;
+  }
+  &.error {
+    border-color: @error;
+  }
 }

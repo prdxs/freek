@@ -6,7 +6,7 @@ import { Session } from 'meteor/session'; // XXX: SESSION
 import ConnectionNotification from '../components/ConnectionNotification.jsx';
 import Loading from '../components/Loading.jsx';
 import Navigator from '../components/Navigator.jsx';
-import NewItemForm from '../components/NewItemForm.jsx';
+import NewItemModal from '../components/NewItemModal.jsx';
 import SearchModal from '../components/SearchModal.jsx';
 
 const CONNECTION_ISSUE_TIMEOUT = 5000;
@@ -16,40 +16,63 @@ export default class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            isNewItemFormOn: false,
-            isSearchModalOn: false,
-            showConnectionIssue: false
+            modals: {
+                showNewItemModal: false,
+                showSearchModal: false
+            },
+            notifications: {
+                showConnectionIssue: false
+            }
         };
+
         this.logout = this.logout.bind(this);
-        this.toggleChat = this.toggleChat.bind(this);
-        this.toggleNewItemForm = this.toggleNewItemForm.bind(this);
+        this.setSearchTerm = this.setSearchTerm.bind(this);
+        this.toggleNewItemModal = this.toggleNewItemModal.bind(this);
         this.toggleSearchModal = this.toggleSearchModal.bind(this);
     }
 
     componentDidMount() {
-        /* XXX Show connection problem if showConnectionIssue and loading are
-        both true */
+        /* Show connection problem if showConnectionIssue and loading are both true */
         setTimeout(() => {
             /* eslint-disable react/no-did-mount-set-state */
-            this.setState({ showConnectionIssue: true });
+            this.setState({ notifications: { showConnectionIssue: true } });
         }, CONNECTION_ISSUE_TIMEOUT);
     }
 
-    toggleNewItemForm(e) {
-        if (!!e) e.preventDefault();
-        this.setState({
-            isNewItemFormOn: !this.state.isNewItemFormOn
-        });
+    componentWillReceiveProps({ loading, children }) {
+        // redirect / to item list when ready
+        if (!loading && !children) {
+            this.context.router.replace('/items');
+        }
+    }
+
+    setSearchTerm(searchTerm = '') {
+        Session.set({ searchTerm });
+    }
+
+    toggleNewItemModal() {
+        if (this.state.modals.showNewItemModal) {
+            console.log('deactivating new item modal');
+            this.state.modals.showNewItemModal = false;
+            this.setState(this.state);
+            console.log(this.state);
+        } else {
+            console.log('activating new item modal');
+            this.state.modals = { showNewItemModal: true, showSearchModal: false };
+            this.setState(this.state);
+            console.log(this.state);
+        }
     }
 
     toggleSearchModal() {
-        this.setState({
-            isSearchModalOn: !this.state.isSearchModalOn
-        });
-    }
-
-    toggleChat(chatOpen = !Session.get('chatOpen')) {
-        Session.set({ chatOpen });
+        if (this.state.modals.showSearchModal) {
+            this.setState({ modals: { showSearchModal: false } });
+        } else {
+            this.setState({ modals: {
+                showNewItemModal: false,
+                showSearchModal: true
+            } });
+        }
     }
 
     logout() {
@@ -57,18 +80,15 @@ export default class App extends React.Component {
     }
 
     render() {
-        const { showConnectionIssue, isNewItemFormOn } = this.state;
+        const { modals, notifications } = this.state;
         const {
             user,
             loading,
             connected,
-            chatOpen,
             children,
             location,
             params
         } = this.props;
-
-        const closeChat = this.toggleChat.bind(this, false);
 
         // clone route components with keys so that they can
         // have transitions
@@ -77,33 +97,41 @@ export default class App extends React.Component {
         });
 
         return (
-            <div id="container">
+            <div className="container-freek">
+
+                { modals.showNewItemModal ?
+                    <NewItemModal ref="newItemModal" toggleNewItemModal={this.toggleNewItemModal} /> : null }
+                { modals.showSearchModal ?
+                    <SearchModal setSearchTerm={this.setSearchTerm}
+                                 toggleSearchModal={this.toggleSearchModal} /> : null }
+
+
+                { notifications.showConnectionIssue && !connected ?
+                    <ConnectionNotification/> : null }
+                
                 <Navigator
-                    isNewItemFormOn={isNewItemFormOn}
+                    isNewItemModalOn={modals.showNewItemModal}
+                    isSearchModalOn={modals.showSearchModal}
                     logout={this.logout}
-                    toggleNewItemForm={this.toggleNewItemForm}
+                    toggleNewItemModal={this.toggleNewItemModal}
                     toggleSearchModal={this.toggleSearchModal}
                     user={user} />
-                {showConnectionIssue && !connected
-                    ? <ConnectionNotification/>
-                    : null}
-                {isNewItemFormOn
-                    ? <NewItemForm toggleNewItemForm={this.toggleNewItemForm} />
-                    : null}
-                {isSearchModalOn
-                    ? <SearchModal
-                        setSearchTerm={this.setSearchTerm}
-                        toggleSearchModal={this.toggleSearchModal} />
-                    : null}
-                <ReactCSSTransitionGroup
-                    transitionName="fade"
-                    transitionEnterTimeout={200}
-                    transitionLeaveTimeout={200}
-                >
-                    {loading
-                        ? <Loading key="loading"/>
-                        : clonedChildren}
-                </ReactCSSTransitionGroup>
+
+
+                <div className="container-fluid">
+
+                    <ReactCSSTransitionGroup
+                        transitionName="fade"
+                        transitionEnterTimeout={200}
+                        transitionLeaveTimeout={200} >
+
+                        {loading
+                            ? <Loading key="loading"/>
+                            : clonedChildren}
+
+                    </ReactCSSTransitionGroup>
+
+                </div>
             </div>
         );
     }

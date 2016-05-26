@@ -1,6 +1,6 @@
-import { _ } from 'meteor/underscore';
-import { Meteor } from 'meteor/meteor';
 import React from 'react';
+
+import Map from '../components/Map.jsx';
 
 export default class SearchModal extends React.Component {
 
@@ -18,27 +18,46 @@ export default class SearchModal extends React.Component {
         const { toggleSearchModal } = this.props;
 
         return (
-            <div className="modal-overlay">
-                <div className="modal">
-                    <i  className="btn modal-btn material-icons close pull-right"
-                        onClick={toggleSearchModal}>close</i>
-                    <div className="modal-title">Buscar</div>
-                    <form className="form search-form" onSubmit={this.onSubmit}>
-                        <input
-                            className="search-input"
-                            type="text"
-                            name="search"
-                            ref="search"
-                            placeholder="Busca..."
-                            autofocus />
-                    </form>
+            <div className="modal modal-freek fade"
+                 data-backdrop="static"
+                 id="searchModal"
+                 tabindex="-1"
+                 role="dialog"
+                 aria-labelledby="searchModalLabel">
+                <div className="modal-dialog modal-lg" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <button type="button" className="close" aria-label="Close" onClick={toggleSearchModal}>
+                                <i className="material-icons">close</i>
+                            </button>
+                            <h4 className="modal-title" id="searchModalLabel">Parámetros de búsqueda</h4>
+                        </div>
+                        <div className="modal-body">
+                            <form className="form" id="search-form" onSubmit={this.onSubmit} ref="searchForm">
+                                <input autofocus
+                                       className='search-term'
+                                       type="text"
+                                       name="search"
+                                       ref="search"
+                                       placeholder="Buscar..." />
+
+                                <Map/>
+                            </form>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn modal-btn" form="search-form" type="submit">
+                                <i className="material-icons">save</i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         );
     }
 }
 
-NewItemForm.propTypes = {
+SearchModal.propTypes = {
     setSearchTerm: React.PropTypes.func,
     toggleSearchModal: React.PropTypes.func
 };

@@ -21,7 +21,7 @@ export default createContainer(() => {
     const loading = !itemsHandle.ready() || !starsHandle.ready() || !imagesHandle.ready();
 
     // Get search input text, if some, to filter items
-    const searchInput = !Session.get('searchInput') ? '' : Session.get('searchInput');
+    const searchInput = !Session.get('searchTerm') ? '' : Session.get('searchTerm');
     var items = ItemsIndex.search(searchInput).fetch();
     items.forEach(item => {
         item.starred = !!Stars.findOne({ itemId: item._id });

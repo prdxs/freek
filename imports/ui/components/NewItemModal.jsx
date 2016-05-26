@@ -7,7 +7,7 @@ import Dropzone from 'react-dropzone';
 import { Images } from '../../api/images/images.js';
 import { insertItem } from '../../api/items/methods.js';
 
-export default class NewItemForm extends React.Component {
+export default class NewItemModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -16,6 +16,14 @@ export default class NewItemForm extends React.Component {
         };
         this.onDrop = this.onDrop.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+    }
+
+    componentDidMount() {
+        $('#newItemModal').modal('show');
+    }
+
+    componentWillUnmount() {
+        $('#newItemModal').modal('hide');
     }
 
     onDrop(images) {
@@ -88,6 +96,7 @@ export default class NewItemForm extends React.Component {
 
         return (
             <div className="modal modal-freek fade"
+                 data-backdrop="static"
                  id="newItemModal"
                  tabindex="-1"
                  role="dialog"
@@ -131,7 +140,7 @@ export default class NewItemForm extends React.Component {
                         </div>
                         <div className="modal-footer">
                             <button className="btn modal-btn" form="new-item-form" type="submit">
-                                <i className="material-icons save">save</i>
+                                <i className="material-icons">save</i>
                             </button>
                         </div>
                     </div>
@@ -142,6 +151,6 @@ export default class NewItemForm extends React.Component {
     }
 }
 
-NewItemForm.propTypes = {
+NewItemModal.propTypes = {
     toggleNewItemModal: React.PropTypes.func
 };
