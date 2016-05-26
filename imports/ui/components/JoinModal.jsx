@@ -1,11 +1,9 @@
-import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 
 import React from 'react';
-import { Link } from 'react-router';
 
 
-export default class SigninModal extends React.Component {
+export default class JoinModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = { errors: {} };
@@ -13,24 +11,32 @@ export default class SigninModal extends React.Component {
     }
 
     componentDidMount() {
-        $('#signinModal').modal('show');
+        $('#joinModal').modal('show');
     }
 
     componentWillUnmount() {
-        $('#signinModal').modal('hide');
+        $('#joinModal').modal('hide');
     }
 
     onSubmit(event) {
         event.preventDefault();
+        const username = this.refs.username.value;
         const email = this.refs.email.value;
         const password = this.refs.password.value;
+        const confirm = this.refs.confirm.value;
         const errors = {};
 
+        if (!username) {
+            errors.username = 'Nombre de usuario requerido';
+        }
         if (!email) {
-            errors.email = 'Se requiere correo electrónico.';
+            errors.email = 'Correo electrónico requerido';
         }
         if (!password) {
-            errors.password = 'Se requiere contraseña.';
+            errors.password = 'Contraseña requerida';
+        }
+        if (confirm !== password) {
+            errors.confirm = 'Por favor, confirma tu contraseña';
         }
 
         this.setState({ errors });
@@ -38,16 +44,19 @@ export default class SigninModal extends React.Component {
             return;
         }
 
-        Meteor.loginWithPassword(email, password, err => {
+        Accounts.createUser({
+            username,
+            email,
+            password
+        }, err => {
             if (err) {
                 this.setState({
                     errors: { none: err.reason }
                 });
-            } else {
-                this.context.router.push('/items');
             }
+            this.context.router.push('/');
         });
-        this.props.toggleSigninModal();
+        this.props.toggleJoinModal();
     }
 
     render() {
@@ -59,20 +68,20 @@ export default class SigninModal extends React.Component {
         return (
             <div className="modal modal-freek fade"
                  data-backdrop="static"
-                 id="signinModal"
+                 id="joinModal"
                  tabindex="-1"
                  role="dialog"
-                 aria-labelledby="signinModalLabel">
+                 aria-labelledby="joinModalLabel">
                 <div className="modal-dialog modal-lg" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <button type="button" className="close" aria-label="Close" onClick={toggleSigninModal}>
+                            <button type="button" className="close" aria-label="Close" onClick={toggleJoinModal}>
                                 <i className="material-icons">close</i>
                             </button>
-                            <h4 className="modal-title" id="signinModalLabel">Sign in</h4>
+                            <h4 className="modal-title" id="joinModalLabel">Sign in</h4>
                         </div>
                         <div className="modal-body">
-                            <form className="form" id="signin-form" onSubmit={this.onSubmit} ref="signinForm">
+                            <form className="form" id="join-form" onSubmit={this.onSubmit} ref="joinForm">
                                 <ul className="error-list">
                                     {errorMessages.map(msg => (
                                         <li className="error-msg animated fadeIn" key={msg}>{msg}</li>
@@ -84,18 +93,28 @@ export default class SigninModal extends React.Component {
                                        placeholder="Email"
                                        ref="email"
                                        type="email" />
+                                <input className={`username ${errorClass('username')}`}
+                                       name="username"
+                                       placeholder="Usuario"
+                                       ref="username"
+                                       type="text" />
                                 <input className={`password ${errorClass('password')}`}
                                        name="password"
                                        placeholder="Contraseña"
                                        ref="password"
                                        type="password" />
+                                <input className={`confirm ${errorClass('confirm')}`}
+                                       name="confirm"
+                                       placeholder="Confirma"
+                                       ref="confirm"
+                                       type="password" />
                             </form>
                             <a  className="join"
                                 href="javascript:void(0)"
-                                onClick={toggleJoinModal}>No estás registrado? Únete!</a>
+                                onClick={toggleSigninModal}>Si ya estás registrado logueate.</a>
                         </div>
                         <div className="modal-footer">
-                            <button className="btn modal-btn" form="signin-form" type="submit">
+                            <button className="btn modal-btn" form="join-form" type="submit">
                                 <i className="material-icons">save</i>
                             </button>
                         </div>
@@ -106,7 +125,7 @@ export default class SigninModal extends React.Component {
     }
 }
 
-SigninModal.propTypes = {
+JoinModal.propTypes = {
     toggleJoinModal: React.PropTypes.func,
     toggleSigninModal: React.PropTypes.func
 };

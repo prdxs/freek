@@ -9,6 +9,7 @@ import Navigator from '../components/Navigator.jsx';
 import NewItemModal from '../components/NewItemModal.jsx';
 import SearchModal from '../components/SearchModal.jsx';
 import SigninModal from '../components/SigninModal.jsx';
+import JoinModal from '../components/JoinModal.jsx';
 
 const CONNECTION_ISSUE_TIMEOUT = 5000;
 
@@ -20,7 +21,8 @@ export default class App extends React.Component {
             modals: {
                 showNewItemModal: false,
                 showSearchModal: false,
-                showSigninModal: false
+                showSigninModal: false,
+                showJoinModal: false
             },
             notifications: {
                 showConnectionIssue: false
@@ -29,6 +31,7 @@ export default class App extends React.Component {
 
         this.logout = this.logout.bind(this);
         this.setSearchTerm = this.setSearchTerm.bind(this);
+        this.toggleJoinModal = this.toggleJoinModal.bind(this);
         this.toggleNewItemModal = this.toggleNewItemModal.bind(this);
         this.toggleSearchModal = this.toggleSearchModal.bind(this);
         this.toggleSigninModal = this.toggleSigninModal.bind(this);
@@ -53,6 +56,22 @@ export default class App extends React.Component {
         Session.set({ searchTerm });
     }
 
+    toggleJoinModal() {
+        console.log('enter');
+        if (this.state.modals.showJoinModal) {
+            this.state.modals.showJoinModal = false;
+            this.setState(this.state);
+        } else {
+            this.state.modals = {
+                showNewItemModal: false,
+                showJoinModal: true,
+                showSearchModal: false,
+                showSigninModal: false
+            };
+            this.setState(this.state);
+        }
+    }
+
     toggleNewItemModal() {
         if (this.state.modals.showNewItemModal) {
             this.state.modals.showNewItemModal = false;
@@ -60,6 +79,7 @@ export default class App extends React.Component {
         } else {
             this.state.modals = {
                 showNewItemModal: true,
+                showJoinModal: false,
                 showSearchModal: false,
                 showSigninModal: false
             };
@@ -74,6 +94,7 @@ export default class App extends React.Component {
         } else {
             this.state.modals = {
                 showNewItemModal: false,
+                showJoinModal: false,
                 showSearchModal: true,
                 showSigninModal: false
             };
@@ -88,6 +109,7 @@ export default class App extends React.Component {
         } else {
             this.state.modals = {
                 showNewItemModal: false,
+                showJoinModal: false,
                 showSearchModal: false,
                 showSigninModal: true
             };
@@ -119,6 +141,10 @@ export default class App extends React.Component {
         return (
             <div className="container-freek">
 
+                { modals.showJoinModal ?
+                    <JoinModal toggleJoinModal={this.toggleJoinModal}
+                                 toggleSigninModal={this.toggleSigninModal} /> : null }
+
                 { modals.showNewItemModal ?
                     <NewItemModal ref="newItemModal" toggleNewItemModal={this.toggleNewItemModal} /> : null }
                 { modals.showSearchModal ?
@@ -126,7 +152,8 @@ export default class App extends React.Component {
                                  toggleSearchModal={this.toggleSearchModal} /> : null }
 
                 { modals.showSigninModal ?
-                    <SigninModal toggleSigninModal={this.toggleSigninModal} /> : null }
+                    <SigninModal toggleJoinModal={this.toggleJoinModal}
+                                 toggleSigninModal={this.toggleSigninModal} /> : null }
 
                 { notifications.showConnectionIssue && !connected ?
                     <ConnectionNotification/> : null }
@@ -148,9 +175,9 @@ export default class App extends React.Component {
                         transitionEnterTimeout={200}
                         transitionLeaveTimeout={200} >
 
-                        {loading
+                        { loading
                             ? <Loading key="loading"/>
-                            : clonedChildren}
+                            : clonedChildren }
 
                     </ReactCSSTransitionGroup>
 
