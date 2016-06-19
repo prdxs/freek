@@ -1,5 +1,6 @@
+import { Meteor } from 'meteor/meteor';
 import React from 'react';
-import { Geolocation } from 'meteor/mdg:geolocation';
+
 
 import Config from '../../config/config.js';
 
@@ -8,39 +9,56 @@ export default class Map extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = { width: 0 };
+        this.state = {
+            lat: 0,
+            lng: 0
+        };
 
         this.getGoogleMapsURL = this.getGoogleMapsURL.bind(this);
+        this.intervalHandler = null;
     }
 
-    getGoogleMapsURL(geo) {
-        const url1 = 'https://www.google.com/maps/embed/v1/place?view=';
-        const url2 = '&zoom=13&size=';
-        const url3 = 'x300&sensor=false';
-
-        if (geo) {
+    componentDidMount() {
+        this.intervalHandler = Meteor.setInterval(() => {
+            this.refs.frame.style.background = '#'+Math.floor(Math.random()*16777215).toString(16);
+        } , 200);
+    }
+    getGoogleMapsURL(lat, lng) {
+        if (!!lat && !!lng) {
+            Meteor.clearInterval(this.intervalHandler);
             return 'https://www.google.com/maps/embed/v1/place?key='
-                + Config.googleMapsAPIKey
-                + '&q=' + geo.lat + ',' + geo.lng
-                + '&zoom=13&maptype=satellite';
+            + Config.googleMapsAPIKey
+            + '&q=' + lat + ',' + lng
+            + '&zoom=13&maptype=satellite';
         } else {
             return '';
         }
+    }
 
+    componentWillReceiveProps(nextProps) {
+        this.setState(nextProps.geo);
+    }
+
+    componentWillUnmount() {
+        Meteor.clearInterval(this.intervalHandler);
     }
 
     render() {
-        const { width } = this.state;
-        const geo = Geolocation.latLng();
+        const { lat, lng } = this.state;
 
         return (
             <iframe
+                ref="frame"
                 width="100%"
                 height="450"
                 frameborder="0"
-                style={{border: 0}}
-                src={this.getGoogleMapsURL(geo)}
+                style={{ border: 0 }}
+                src={this.getGoogleMapsURL(lat, lng)}
                 allowfullscreen />
         );
     }
+}
+
+Map.propTypes = {
+    geo: React.PropTypes.object
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Geolocation } from 'meteor/mdg:geolocation';
 
 import Map from '../components/Map.jsx';
 
@@ -10,6 +11,9 @@ export default class SearchModal extends React.Component {
     }
 
     componentDidMount() {
+        $('#searchModal').on('shown.bs.modal', function () {
+            $('.search-term').focus()
+        });
         $('#searchModal').modal('show');
     }
 
@@ -43,14 +47,13 @@ export default class SearchModal extends React.Component {
                         </div>
                         <div className="modal-body">
                             <form className="form" id="search-form" onSubmit={this.onSubmit} ref="searchForm">
-                                <input autofocus
-                                       className='search-term'
+                                <input className='search-term'
                                        type="text"
                                        name="search"
                                        ref="search"
                                        placeholder="Buscar..." />
 
-                                <Map/>
+                                <Map geo={Geolocation.latLng()} />
                             </form>
                         </div>
                         <div className="modal-footer">

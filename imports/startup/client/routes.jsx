@@ -8,6 +8,7 @@ import AuthPageSignIn from '../../ui/pages/AuthPageSignIn.jsx';
 import AuthPageJoin from '../../ui/pages/AuthPageJoin.jsx';
 import NotFoundPage from '../../ui/pages/NotFoundPage.jsx';
 import AboutPage from '../../ui/pages/AboutPage.jsx';
+//import ItemPage from '../../ui/pages/ItemPage.jsx';
 
 export const renderRoutes = () => (
     <Router history={browserHistory}>

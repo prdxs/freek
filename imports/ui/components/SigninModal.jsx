@@ -13,6 +13,9 @@ export default class SigninModal extends React.Component {
     }
 
     componentDidMount() {
+        $('#signinModal').on('shown.bs.modal', function () {
+            $('.email').focus()
+        });
         $('#signinModal').modal('show');
     }
 
@@ -78,8 +81,7 @@ export default class SigninModal extends React.Component {
                                         <li className="error-msg animated fadeIn" key={msg}>{msg}</li>
                                     ))}
                                 </ul>
-                                <input autofocus
-                                       className={`email ${errorClass('email')}`}
+                                <input className={`email ${errorClass('email')}`}
                                        name="email"
                                        placeholder="Email"
                                        ref="email"

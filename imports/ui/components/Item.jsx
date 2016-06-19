@@ -10,8 +10,36 @@ export default class Item extends React.Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            imgLoaded: false
+        };
+
         this.removeItem = this.removeItem.bind(this);
         this.toggleStar = this.toggleStar.bind(this);
+        this.onImgLoad = this.onImgLoad.bind(this);
+        this.intervalHandler = null;
+    }
+
+    componentDidMount() {
+        if (!this.state.imgLoaded) {
+            this.intervalHandler = setInterval(() => {
+                this.refs.pic.style.background = '#'+Math.floor(Math.random()*16777215).toString(16);
+            }, 400);
+        }
+    }
+
+    componentWillUnmount() {
+        if (!!this.intervalHandler) {
+            clearInterval(this.invervalHandler);
+        }
+    }
+
+    onImgLoad() {
+        this.setState({ imgLoaded: true });
+        if (!!this.intervalHandler) {
+            clearInterval(this.intervalHandler);
+            this.refs.pic.style.background = '';
+        }
     }
 
     removeItem() {
@@ -34,7 +62,7 @@ export default class Item extends React.Component {
                 className='item'
                 data-date={item.createdAt}>
 
-                <div className="pic">
+                <div className="pic" ref="pic">
                     { !!Meteor.userId() ?
                         <div className="btns-overlay">
                             { editable ?
@@ -56,10 +84,10 @@ export default class Item extends React.Component {
                         </div>
                         : null
                     }
-                    <img src={item.images[0].url()} />
+                    <img onLoad={this.onImgLoad} src={item.images[0].url()} />
                 </div>
                 <div className="info">
-                    <h4 className="title"><Link to={`/items/${item.__originalId}`}>{item.title}</Link></h4>
+                    <h4 className="title"><Link to={`/items/item/${item.__originalId}`}>{item.title}</Link></h4>
                     <p className="description">{
                         item.description.length > 46 ?
                         item.description.substring(0, 46) + '...' :
