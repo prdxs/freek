@@ -1,0 +1,7 @@
+{
+  "galaxy.meteor.com": {
+    "env": {
+      "MONGO_URL": "mongodb://admin:ff2jb51225@ds013320.mlab.com:13320/freek-mongodb"
+    }
+  }
+}
