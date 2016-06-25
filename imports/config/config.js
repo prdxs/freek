@@ -1,3 +1,3 @@
 export default Config = {
-    googleMapsAPIKey: 'AIzaSyBeKINMe7IS044VHXfF77mfKFFS_QDvtk4'
+    googleMapsAPIKey: 'AIzaSyBOjV5HFLC5In1qRORK2q2azD8GUyyusXs'
 };

@@ -18,20 +18,12 @@ export default class Map extends React.Component {
         this.intervalHandler = null;
     }
 
-    componentDidMount() {
-        this.intervalHandler = Meteor.setInterval(() => {
-            this.refs.frame.style.background = '#'+Math.floor(Math.random()*16777215).toString(16);
-        } , 200);
-    }
     getGoogleMapsURL(lat, lng) {
         if (!!lat && !!lng) {
-            Meteor.clearInterval(this.intervalHandler);
             return 'https://www.google.com/maps/embed/v1/place?key='
             + Config.googleMapsAPIKey
             + '&q=' + lat + ',' + lng
             + '&zoom=13&maptype=satellite';
-        } else {
-            return '';
         }
     }
 
@@ -39,12 +31,8 @@ export default class Map extends React.Component {
         this.setState(nextProps.geo);
     }
 
-    componentWillUnmount() {
-        Meteor.clearInterval(this.intervalHandler);
-    }
-
     render() {
-        const { lat, lng } = this.state;
+        const { geo } = this.props;
 
         return (
             <iframe
@@ -53,7 +41,7 @@ export default class Map extends React.Component {
                 height="450"
                 frameborder="0"
                 style={{ border: 0 }}
-                src={this.getGoogleMapsURL(lat, lng)}
+                src={_.isEmpty(geo) ? '' : this.getGoogleMapsURL(geo.lat, geo.lng)}
                 allowfullscreen />
         );
     }
