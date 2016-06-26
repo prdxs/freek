@@ -1,6 +1,6 @@
 import { Session } from 'meteor/session'; // XXX SESSION
 import React from 'react';
-import Flickity from 'react-flickity';
+import { Link } from 'react-router';
 import { _ } from 'meteor/underscore';
 
 import Item from '../components/Item.jsx';
@@ -32,7 +32,7 @@ export default class ItemPage extends React.Component {
             return (
                 <div className="page item-page">
                     <h1 className="title">{item.title}</h1>
-                    <h2 className="owner">publicado por {item.username}</h2>
+                    <h2 className="owner">publicado por <Link to={`/user/${item.username}`}>{item.username}</Link></h2>
                     <h3 className="date">{item.createdAt.toLocaleString('es')}</h3>
                     <p className="description">{item.description}</p>
                     <Carousel images={item.images}/>
