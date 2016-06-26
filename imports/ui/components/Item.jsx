@@ -87,7 +87,7 @@ export default class Item extends React.Component {
                     <img onLoad={this.onImgLoad} src={item.images[0].url()} />
                 </div>
                 <div className="info">
-                    <h4 className="title"><Link to={`/${item.__originalId}`}>{item.title}</Link></h4>
+                    <h4 className="title"><Link to={`/item/${item.__originalId}`}>{item.title}</Link></h4>
                     <p className="description">{
                         item.description.length > 46 ?
                         item.description.substring(0, 46) + '...' :
