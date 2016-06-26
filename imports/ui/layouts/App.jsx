@@ -135,7 +135,8 @@ export default class App extends React.Component {
         // clone route components with keys so that they can
         // have transitions
         const clonedChildren = children && React.cloneElement(children, {
-            key: location.pathname
+            key: location.pathname,
+            routeParams: this.props.params
         });
 
         return (
@@ -157,7 +158,7 @@ export default class App extends React.Component {
 
                 { notifications.showConnectionIssue && !connected ?
                     <ConnectionNotification/> : null }
-                
+
                 <Navigator
                     isNewItemModalOn={modals.showNewItemModal}
                     isSearchModalOn={modals.showSearchModal}
