@@ -1,13 +1,17 @@
 import { Session } from 'meteor/session'; // XXX SESSION
-import { _ } from 'meteor/underscore';
 import React from 'react';
+import { Link } from 'react-router';
+import { _ } from 'meteor/underscore';
+
 import Item from '../components/Item.jsx';
 import Loading from '../components/Loading.jsx';
 import Message from '../components/Message.jsx';
+import Carousel from '../components/Carousel.jsx';
 
 export default class ItemPage extends React.Component {
-    constructor(props, context) {
-        super(props, context);
+
+    constructor(props) {
+        super(props);
     }
 
     render() {
@@ -15,32 +19,31 @@ export default class ItemPage extends React.Component {
 
         let Item;
         if (loading) {
-            Item = <Loading/>;
+            return <Loading/>;
         }
         else if (!item) {
-            Item = (
+            return (
                 <Message
                     title="Id del ítem incorrecto"
                     subtitle="No existe ningún ítem con dicho Id"
                 />
             );
-        } else { Item = item; }
-
-        return (
-            <div className="page item-page">
-                <h1 className="title">{item.title}</h1>
-                <p className="description">{item.description}</p>
-                <p className="owner">{item.owner}</p>
-
-                <div className="carousel">
+        } else {
+            return (
+                <div className="page item-page">
+                    <h1 className="title">{item.title}</h1>
+                    <h2 className="owner">publicado por <Link to={`/user/${item.username}`}>{item.username}</Link></h2>
+                    <h3 className="date">{item.createdAt.toLocaleString('es')}</h3>
+                    <p className="description">{item.description}</p>
+                    <Carousel images={item.images}/>
                 </div>
-            </div>
-        );
+            );
+        }
     }
 }
 
 ItemPage.propTypes = {
-    item: React.PropTypes.array,
+    item: React.PropTypes.object,
     loading: React.PropTypes.bool,
     user: React.PropTypes.object
 };
