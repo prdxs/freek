@@ -8,14 +8,14 @@
     "chimp-watch": "chimp --ddp=http://localhost:3000 --watch --mocha --path=tests"
   },
   "dependencies": {
-    "autoprefixer": "^6.3.1",
-    "classnames": "^2.2.3",
+    "autoprefixer": "^6.3.6",
+    "classnames": "^2.2.5",
     "faker": "^3.0.1",
     "flickity": "^1.2.1",
-    "react": "^15.0.0",
+    "react": "^15.1.0",
     "react-addons-css-transition-group": "https://registry.npmjs.org/react-addons-css-transition-group/-/react-addons-css-transition-group-15.0.1.tgz",
-    "react-addons-pure-render-mixin": "^15.0.0",
-    "react-dom": "^15.0.0",
+    "react-addons-pure-render-mixin": "^15.1.0",
+    "react-dom": "^15.1.0",
     "react-dropzone": "^3.4.0",
     "react-router": "https://registry.npmjs.org/react-router/-/react-router-2.0.1.tgz"
   },

@@ -13,14 +13,16 @@ export default class Carousel extends React.Component {
             pageDots: true,
             wrapAround: true,
             autoPlay: 3000 // default false
-        }
+        };
     }
 
     componentDidMount() {
         const carousel = this.refs.carousel;
 
         this.flkty = new Flickity(carousel, this.flickityOptions);
-        this.flkty.resize();
+
+        // Avoiding height loading problems..
+        setTimeout(() => this.flkty.resize(), 500);
     }
 
     componentWillUnmount() {
@@ -35,8 +37,8 @@ export default class Carousel extends React.Component {
         return (
             <div ref="carousel" className='carousel'>
                 { images.map(im => (
-                    <div className="sliderBoxes">
-                        <img key={im._id} src={im.url({store: 'medium'})} />
+                    <div key={im._id} className="sliderBoxes">
+                        <img src={im.url({store: 'medium'})} />
                     </div>
                 )) }
             </div>

@@ -92,7 +92,7 @@ export default class Item extends React.Component {
                         item.description.length > 46 ?
                         item.description.substring(0, 46) + '...' :
                         item.description}</p>
-                    <h5 className="owner"><Link to={`/users/${item.username}`}>{item.username}</Link></h5>
+                    <h5 className="owner"><Link to={`/user/${item.username}`}>{item.username}</Link></h5>
                 </div>
             </div>
         );
