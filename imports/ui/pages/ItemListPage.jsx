@@ -115,7 +115,7 @@ export default class ItemListPage extends React.Component {
 
         return (
             <div>
-                <div className="page item-page">
+                <div className="page item-list-page">
                     <div className="item-list" ref="isotopeContainer">
                         {Items}
                     </div>
